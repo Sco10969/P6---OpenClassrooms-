@@ -25,7 +25,7 @@ export function photographerTemplate(data) {
         h2.classList.add('name');
         h2.textContent = name;
 
-        const location = document.createElement('p');
+        const location = document.createElement('span');
         location.classList.add('location');
         location.textContent = `${city}, ${country}`;
 
@@ -33,11 +33,12 @@ export function photographerTemplate(data) {
         taglineElement.classList.add('tagline');
         taglineElement.textContent = tagline;
 
-        const priceElement = document.createElement('p');
+        const priceElement = document.createElement('data');
         priceElement.classList.add('price');
         priceElement.textContent = `${price}€/jour`;
 
-        link.appendChild(img);
+        link.appendChild(imgContainer);
+        imgContainer.appendChild(img);
         link.appendChild(h2);
         description.appendChild(location);
         description.appendChild(taglineElement);
