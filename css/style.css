@@ -6,6 +6,10 @@
     box-sizing: border-box;
 }
 
+html {
+    font-size: 62.5%; /* 62.5% de 16px = 10px */
+}
+
 body {
     font-family: "DM Sans", sans-serif;
     margin: 0;

@@ -2,25 +2,6 @@
     display: none;
 }
 
-.photograph-header {
-    background-color: #FAFAFA;
-    height: 300px;
-    margin: 0 100px;
-}
-
-.contact_button {
-    font-size: 20px;
-    font-weight: bold;
-    color: white;
-    padding: 11px;
-    width: 170px;
-    height: 70px;
-    border: none;
-    background-color: #901C1C;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
 .modal {
     border-radius: 5px;
     background-color: #DB8876;
@@ -73,4 +54,62 @@ form input {
     height: 68px;
     border: none;
     border-radius: 5px;
+}
+
+.photographer_header .card-index.detail-page {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    column-gap: 230px;
+    height: 313px;
+
+    & .header-content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+        width: 358px;
+        gap: 2rem;
+
+        & .name {
+            color: #D3573C;
+            font-size: 6.4rem;
+        }
+
+        & .location {
+            color: #901C1C;
+            font-size: 2.4rem;
+        }
+
+        & .tagline {
+            color: #525252;
+            font-size: 1.8rem;
+        }
+    }
+    & .contact_button {
+        width: 170px;
+        font-size: 2rem;
+        font-weight: bold;
+        color: white;
+        padding: 22px 11px;
+        background-color: #901C1C;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        justify-self: center;
+    }
+    & .img-container {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        overflow: hidden;
+        box-shadow: 0px 4px 12px 0px #00000040;
+
+        & .portrait {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            transform: scale(1.4);
+        }
+    }
 }
