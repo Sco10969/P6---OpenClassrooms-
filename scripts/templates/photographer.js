@@ -1,54 +1,13 @@
 import { displayModal } from '../utils/contactForm.js';
 
-export function photographerTemplate(data, isDetailPage = false) {
-    const { name, portrait, city, country, tagline, price, id } = data;
+export function photographerTemplate(photographerState) {
+    const { name, portrait, city, country, tagline, price, id } = photographerState.photographerData;
     const picture = `assets/photographers/${portrait}`;
 
     function getUserCardDOM() {
         const card = document.createElement('figure');
         card.classList.add('card-index');
 
-        if (isDetailPage) {
-            card.classList.add('detail-page');
-
-            const headerContent = document.createElement('div');
-            headerContent.classList.add('header-content');
-
-            const nameElement = document.createElement('h2');
-            nameElement.classList.add('name');
-            nameElement.textContent = name;
-
-            const locationElement = document.createElement('p');
-            locationElement.classList.add('location');
-            locationElement.textContent = `${city}, ${country}`;
-
-            const taglineElement = document.createElement('p');
-            taglineElement.classList.add('tagline');
-            taglineElement.textContent = tagline;
-
-            headerContent.appendChild(nameElement);
-            headerContent.appendChild(locationElement);
-            headerContent.appendChild(taglineElement);
-
-            const contactButton = document.createElement('button');
-            contactButton.classList.add('contact_button');
-            contactButton.textContent = 'Contactez-moi';
-            contactButton.setAttribute('aria-label', 'Ouvrir le formulaire de contact');
-            contactButton.addEventListener('click', displayModal);
-
-            const imgContainer = document.createElement('div');
-            imgContainer.classList.add('img-container');
-
-            const img = document.createElement('img');
-            img.classList.add('portrait');
-            img.setAttribute("src", picture);
-
-            imgContainer.appendChild(img);
-
-            card.appendChild(headerContent);
-            card.appendChild(contactButton);
-            card.appendChild(imgContainer);
-        } else {
             const link = document.createElement('a');
             link.classList.add('link');
             link.setAttribute("href", `./photographer.html?id=${id}`);
@@ -89,10 +48,74 @@ export function photographerTemplate(data, isDetailPage = false) {
             description.appendChild(priceElement);
             card.appendChild(link);
             card.appendChild(description);
-        }
 
         return card;
     }
 
-    return { getUserCardDOM };
+    function getPhotographerHeaderDOM() {
+        const card = document.createElement('figure');
+        card.classList.add('card-index');
+        card.classList.add('detail-page');
+
+            const headerContent = document.createElement('div');
+            headerContent.classList.add('header-content');
+
+            const nameElement = document.createElement('h2');
+            nameElement.classList.add('name');
+            nameElement.textContent = name;
+
+            const locationElement = document.createElement('p');
+            locationElement.classList.add('location');
+            locationElement.textContent = `${city}, ${country}`;
+
+            const taglineElement = document.createElement('p');
+            taglineElement.classList.add('tagline');
+            taglineElement.textContent = tagline;
+
+            headerContent.appendChild(nameElement);
+            headerContent.appendChild(locationElement);
+            headerContent.appendChild(taglineElement);
+
+            const contactButton = document.createElement('button');
+            contactButton.classList.add('contact_button');
+            contactButton.textContent = 'Contactez-moi';
+            contactButton.setAttribute('aria-label', 'Ouvrir le formulaire de contact');
+            contactButton.addEventListener('click', displayModal);
+
+            const imgContainer = document.createElement('div');
+            imgContainer.classList.add('img-container');
+
+            const img = document.createElement('img');
+            img.classList.add('portrait');
+            img.setAttribute("src", picture);
+
+            imgContainer.appendChild(img);
+
+            card.appendChild(headerContent);
+            card.appendChild(contactButton);
+            card.appendChild(imgContainer);
+
+        return card;
+    }
+
+    function getMediaSectionDOM() {
+        const mediaData = photographerState.mediaData;
+
+        const mediaCards = mediaData.map(media => {
+            const mediaCard = document.createElement('figure');
+            mediaCard.classList.add('card-index', 'media-card');
+
+            const title = document.createElement('p');
+            title.textContent = media.title;
+
+            mediaCard.appendChild(title);
+
+            return mediaCard;
+        });
+
+
+        return mediaCards;
+    }
+
+    return { getUserCardDOM, getPhotographerHeaderDOM, getMediaSectionDOM };
 }

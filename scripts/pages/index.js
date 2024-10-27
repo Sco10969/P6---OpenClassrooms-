@@ -6,7 +6,7 @@ async function getPhotographers() {
     if (response.ok) {
         const data = await response.json();
         console.log(data.photographers);
-        return data.photographers;
+        return data.photographers.map(photographer => ({ photographerData: photographer }));
     } else {
         return [];
     }
