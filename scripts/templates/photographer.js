@@ -105,14 +105,33 @@ export function photographerTemplate(photographerState) {
             const mediaCard = document.createElement('figure');
             mediaCard.classList.add('card-index', 'media-card');
 
+            let mediaElement;
+            if (media.image) {
+                mediaElement = document.createElement('img');
+                mediaElement.setAttribute('src', `assets/medias/${name}/${media.image}`);
+                mediaElement.setAttribute('alt', media.title);
+            } else if (media.video) {
+                mediaElement = document.createElement('video');
+                mediaElement.setAttribute('muted', true);
+                mediaElement.setAttribute('loop', true);
+                mediaElement.setAttribute('autoplay', true);
+                mediaElement.setAttribute('playsinline', true);
+                mediaElement.style.pointerEvents = 'none';
+
+                const source = document.createElement('source');
+                source.setAttribute('src', `assets/medias/${name}/${media.video}`);
+                source.setAttribute('type', 'video/mp4');
+                mediaElement.appendChild(source);
+            }
+
             const title = document.createElement('p');
             title.textContent = media.title;
 
+            mediaCard.appendChild(mediaElement);
             mediaCard.appendChild(title);
 
             return mediaCard;
         });
-
 
         return mediaCards;
     }
