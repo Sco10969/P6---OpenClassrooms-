@@ -59,58 +59,70 @@ form input {
 .photographer_header .card-index {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    background-color: #FAFAFA;
     align-items: center;
-    column-gap: 230px;
+    column-gap: 180px;
     height: 313px;
+    margin-bottom: 20px;
+    padding: 0 50px;
+}
 
-    & .header-content {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        text-align: left;
-        width: 358px;
-        gap: 2rem;
+.photographer_header .card-index .content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 50px;
+}
 
-        & .name {
-            color: #D3573C;
-            font-size: 6.4rem;
-        }
+.photographer_header .card-index .header-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    width: 358px;
+    gap: 2rem;
 
-        & .location {
-            color: #901C1C;
-            font-size: 2.4rem;
-        }
-
-        & .tagline {
-            color: #525252;
-            font-size: 1.8rem;
-        }
+    & .name {
+        color: #D3573C;
+        font-size: 6.4rem;
     }
-    & .contact_button {
-        width: 170px;
-        font-size: 2rem;
-        font-weight: bold;
-        color: white;
-        padding: 22px 11px;
-        background-color: #901C1C;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        justify-self: center;
+
+    & .location {
+        color: #901C1C;
+        font-size: 2.4rem;
     }
-    & .img-container {
+
+    & .tagline {
+        color: #525252;
+        font-size: 1.8rem;
+    }
+}
+
+.photographer_header .card-index .contact_button {
+    width: 170px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    padding: 22px 11px;
+    background-color: #901C1C;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    justify-self: center;
+}
+
+.photographer_header .card-index .img-container {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0px 4px 12px 0px #00000040;
+
+    & .portrait {
         width: 200px;
         height: 200px;
-        border-radius: 50%;
-        overflow: hidden;
-        box-shadow: 0px 4px 12px 0px #00000040;
-
-        & .portrait {
-            width: 200px;
-            height: 200px;
-            object-fit: cover;
-            transform: scale(1.4);
-        }
+        object-fit: cover;
+        transform: scale(1.4);
     }
 }
 
@@ -136,9 +148,35 @@ form input {
     border-radius: 5px;
 }
 
-.media-card p {
+.media-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
     padding-top: 10px;
+}
+
+.media-info p {
     font-size: 2.4rem;
     color: #901C1C;
-    text-align: start;
+    margin: 0;
+}
+
+.likes-container {
+    display: flex;
+    gap: 5px;
+
+    & .likes-count {
+        font-size: 2.4rem;
+        color: #901C1C;
+    }
+
+    & .like-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }

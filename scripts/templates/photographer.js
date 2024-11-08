@@ -98,6 +98,15 @@ export function photographerTemplate(photographerState) {
         return card;
     }
 
+    function createHeartIcon() {
+        const heartIcon = document.createElement('img');
+        heartIcon.setAttribute('src', 'assets/icons/favorite-24px 1.svg');
+        heartIcon.setAttribute('alt', 'like icon');
+        heartIcon.style.width = '21px';
+        heartIcon.style.height = '24px';
+        return heartIcon;
+    }
+
     function getMediaSectionDOM() {
         const mediaData = photographerState.mediaData;
 
@@ -124,11 +133,46 @@ export function photographerTemplate(photographerState) {
                 mediaElement.appendChild(source);
             }
 
+            // Figcaption de medias infos
+            const figcaption = document.createElement('figcaption');
+            figcaption.classList.add('media-info');
+
+            // Title de medias infos
             const title = document.createElement('p');
             title.textContent = media.title;
 
+            // Likes container de medias infos
+            const likesContainer = document.createElement('div');
+            likesContainer.classList.add('likes-container');
+
+            // Récupère les likes stockés dans le localStorage
+            const storedLikes = localStorage.getItem(`likes-${media.id}`);
+            media.likes = storedLikes ? parseInt(storedLikes, 10) : media.likes;
+
+            // Conteur de likes de medias infos
+            const likesCount = document.createElement('span');
+            likesCount.classList.add('likes-count');
+            likesCount.textContent = media.likes;
+
+            // Bouton de like de medias infos
+            const likeButton = document.createElement('button');
+            likeButton.classList.add('like-button');
+            likeButton.appendChild(createHeartIcon());
+
+            likeButton.addEventListener('click', () => {
+                media.likes += 1;
+                likesCount.textContent = media.likes;
+                localStorage.setItem(`likes-${media.id}`, media.likes);
+            });
+
+            likesContainer.appendChild(likesCount);
+            likesContainer.appendChild(likeButton);
+
+            figcaption.appendChild(title);
+            figcaption.appendChild(likesContainer);
+
             mediaCard.appendChild(mediaElement);
-            mediaCard.appendChild(title);
+            mediaCard.appendChild(figcaption);
 
             return mediaCard;
         });
