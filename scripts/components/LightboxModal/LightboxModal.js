@@ -8,17 +8,12 @@ export class LightboxModal {
     }
 
     handleKeyboard(e) {
-        switch(e.key) {
-            case 'Escape': 
-                this.close();
-                break;
-            case 'ArrowLeft': 
-                this.prev();
-                break;
-            case 'ArrowRight': 
-                this.next();
-                break;
-        }
+        const actions = {
+            'Escape': () => this.close(),
+            'ArrowLeft': () => this.prev(),
+            'ArrowRight': () => this.next()
+        };
+        actions[e.key]?.();
     }
 
     close() {
@@ -28,116 +23,100 @@ export class LightboxModal {
     }
 
     prev() {
-        this.currentIndex = (this.currentIndex - 1 + this.mediaList.length) % this.mediaList.length;
-        this.showMedia(this.currentIndex);
+        this.showMedia((this.currentIndex - 1 + this.mediaList.length) % this.mediaList.length);
     }
 
     next() {
-        this.currentIndex = (this.currentIndex + 1) % this.mediaList.length;
-        this.showMedia(this.currentIndex);
+        this.showMedia((this.currentIndex + 1) % this.mediaList.length);
     }
 
     showMedia(index) {
+        this.currentIndex = index;
         const media = this.mediaList[index];
+        this.mediaContainer.innerHTML = '';
+
+        const element = media.image 
+            ? this.createImage(media)
+            : this.createVideo(media);
+
+        this.mediaContainer.appendChild(element);
+        this.title.textContent = media.title;
+    }
+
+    createImage(media) {
+        const img = document.createElement('img');
+        img.src = `assets/medias/${media.photographerName}/${media.image}`;
+        img.alt = media.title;
+        return img;
+    }
+
+    createVideo(media) {
+        const video = document.createElement('video');
+        Object.assign(video, {
+            autoplay: true,
+            loop: true,
+            muted: true,
+            playsInline: true
+        });
         
-        while (this.mediaContainer.firstChild) {
-            this.mediaContainer.removeChild(this.mediaContainer.firstChild);
-        }
+        const source = document.createElement('source');
+        source.src = `assets/medias/${media.photographerName}/${media.video}`;
+        source.type = 'video/mp4';
+        video.appendChild(source);
+        return video;
+    }
 
-        if (media.image) {
-            const img = document.createElement('img');
-            img.src = `assets/medias/${media.photographerName}/${media.image}`;
-            img.alt = media.title;
-            this.mediaContainer.appendChild(img);
-        } else if (media.video) {
-            const video = document.createElement('video');
-            video.autoplay = true;
-            video.loop = true;
-            video.muted = true;
-            video.setAttribute('aria-label', media.title);
-            
-            const source = document.createElement('source');
-            source.src = `assets/medias/${media.photographerName}/${media.video}`;
-            source.type = 'video/mp4';
-            
-            video.appendChild(source);
-            this.mediaContainer.appendChild(video);
-        }
-
-        // Mise à jour du titre
-        const titleText = document.createTextNode(media.title);
-        while (this.title.firstChild) {
-            this.title.removeChild(this.title.firstChild);
-        }
-        this.title.appendChild(titleText);
+    createButton(className, icon, label) {
+        const button = document.createElement('button');
+        button.className = className;
+        button.setAttribute('aria-label', label);
+        
+        const img = document.createElement('img');
+        img.src = `assets/icons/${icon}`;
+        img.alt = '';
+        img.setAttribute('aria-hidden', 'true');
+        
+        button.appendChild(img);
+        return button;
     }
 
     render() {
         const lightbox = document.createElement('div');
-        lightbox.classList.add('lightbox-modal');
+        lightbox.className = 'lightbox-modal';
         lightbox.setAttribute('role', 'dialog');
         lightbox.setAttribute('aria-label', 'Visionneuse de média');
         this.lightboxElement = lightbox;
 
         const content = document.createElement('div');
-        content.classList.add('lightbox-modal__content');
+        content.className = 'lightbox-modal__content';
 
-        // Bouton Close
-        const closeBtn = document.createElement('button');
-        closeBtn.classList.add('lightbox-modal__close');
-        closeBtn.setAttribute('aria-label', 'Fermer la lightbox');
-        const closeImg = document.createElement('img');
-        closeImg.src = 'assets/icons/close.svg';
-        closeImg.alt = '';
-        closeImg.setAttribute('aria-hidden', 'true');
-        closeBtn.appendChild(closeImg);
+        const buttons = {
+            close: this.createButton('lightbox-modal__close', 'close.svg', 'Fermer la lightbox'),
+            prev: this.createButton('lightbox-modal__prev', 'nav_prev.svg', 'Image précédente'),
+            next: this.createButton('lightbox-modal__next', 'nav_next.svg', 'Image suivante')
+        };
 
-        // Bouton Previous
-        const prevBtn = document.createElement('button');
-        prevBtn.classList.add('lightbox-modal__prev');
-        prevBtn.setAttribute('aria-label', 'Image précédente');
-        const prevImg = document.createElement('img');
-        prevImg.src = 'assets/icons/nav_prev.svg';
-        prevImg.alt = '';
-        prevImg.setAttribute('aria-hidden', 'true');
-        prevBtn.appendChild(prevImg);
+        this.mediaContainer = document.createElement('div');
+        this.mediaContainer.className = 'lightbox-modal__media';
 
-        // Bouton Next
-        const nextBtn = document.createElement('button');
-        nextBtn.classList.add('lightbox-modal__next');
-        nextBtn.setAttribute('aria-label', 'Image suivante');
-        const nextImg = document.createElement('img');
-        nextImg.src = 'assets/icons/nav_next.svg';
-        nextImg.alt = '';
-        nextImg.setAttribute('aria-hidden', 'true');
-        nextBtn.appendChild(nextImg);
+        this.title = document.createElement('p');
+        this.title.className = 'lightbox-modal__title';
 
-        // Conteneur média
-        const mediaContainer = document.createElement('div');
-        mediaContainer.classList.add('lightbox-modal__media');
-        this.mediaContainer = mediaContainer;
-
-        // Titre
-        const title = document.createElement('p');
-        title.classList.add('lightbox-modal__title');
-        this.title = title;
-
-        // Assemblage
-        content.appendChild(closeBtn);
-        content.appendChild(prevBtn);
-        content.appendChild(mediaContainer);
-        content.appendChild(nextBtn);
-        content.appendChild(title);
+        content.append(
+            buttons.close,
+            buttons.prev,
+            this.mediaContainer,
+            buttons.next,
+            this.title
+        );
         lightbox.appendChild(content);
 
-        // Événements
-        closeBtn.addEventListener('click', () => this.close());
-        prevBtn.addEventListener('click', () => this.prev());
-        nextBtn.addEventListener('click', () => this.next());
+        buttons.close.addEventListener('click', () => this.close());
+        buttons.prev.addEventListener('click', () => this.prev());
+        buttons.next.addEventListener('click', () => this.next());
         document.addEventListener('keydown', this.keyboardListener);
 
         this.showMedia(this.currentIndex);
-
         return lightbox;
     }
 }

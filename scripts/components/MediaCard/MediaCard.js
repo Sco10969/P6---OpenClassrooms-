@@ -1,5 +1,6 @@
 import { LikeButton } from '../LikeButton/LikeButton.js';
 import { ModalManager } from '../../utils/ModalManager.js';
+import { LightboxModal } from '../LightboxModal/LightboxModal.js';
 
 export class MediaCard {
     constructor(media, photographerName) {
@@ -21,20 +22,24 @@ export class MediaCard {
         
         if (this.media.video) {
             const video = document.createElement('video');
-            video.setAttribute('muted', true);
-            video.setAttribute('loop', true);
-            video.setAttribute('autoplay', true);
-            video.setAttribute('playsinline', true);
+            video.muted = true;
+            video.loop = true;
+            video.autoplay = true;
+            video.playsInline = true;
 
             const source = document.createElement('source');
-            source.setAttribute('src', `assets/medias/${this.photographerName}/${this.media.video}`);
-            source.setAttribute('type', 'video/mp4');
+            source.src = `assets/medias/${this.photographerName}/${this.media.video}`;
+            source.type = 'video/mp4';
+            
             video.appendChild(source);
             mediaContainer.appendChild(video);
+
+            video.play().catch(error => {
+                console.log('Auto-play failed:', error);
+            });
         }
 
         mediaContainer.addEventListener('click', () => {
-            console.log('Media clicked!');
             this.openLightbox();
         });
 
@@ -44,13 +49,21 @@ export class MediaCard {
     openLightbox() {
         const allMediaCards = Array.from(document.querySelectorAll('.media-card'));
         const allMedias = allMediaCards.map(card => {
-            const img = card.querySelector('img');
-            const video = card.querySelector('video');
+            const mediaElement = card.querySelector('.media-container img, .media-container video');
             const title = card.querySelector('.media-info p').textContent;
             
+            let mediaPath;
+            if (mediaElement.tagName === 'IMG') {
+                mediaPath = mediaElement.getAttribute('src');
+            } else if (mediaElement.tagName === 'VIDEO') {
+                mediaPath = mediaElement.querySelector('source').getAttribute('src');
+            }
+
+            const fileName = mediaPath.split('/').pop();
+            
             return {
-                image: img ? img.getAttribute('src').split('/').pop() : null,
-                video: video ? video.querySelector('source').getAttribute('src').split('/').pop() : null,
+                image: mediaElement.tagName === 'IMG' ? fileName : null,
+                video: mediaElement.tagName === 'VIDEO' ? fileName : null,
                 title: title,
                 photographerName: this.photographerName
             };

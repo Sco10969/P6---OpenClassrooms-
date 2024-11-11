@@ -1,4 +1,3 @@
-import { ContactFormModal } from '../components/ContactFormModal/ContactFormModal.js';
 import { LightboxModal } from '../components/LightboxModal/LightboxModal.js';
 
 export class ModalManager {
@@ -34,11 +33,10 @@ export class ModalManager {
 
             case this.MODAL_TYPES.LIGHTBOX:
                 const { mediaList, currentIndex } = props;
-                console.log('Creating lightbox with:', { mediaList, currentIndex });
                 const lightboxModal = new LightboxModal(mediaList, currentIndex);
                 this.activeModal = lightboxModal;
                 document.body.appendChild(lightboxModal.render());
-                document.body.style.overflow = 'hidden';
+                document.body.style.overflow = 'hidden'; // Empêcher le scroll
                 break;
         }
     }

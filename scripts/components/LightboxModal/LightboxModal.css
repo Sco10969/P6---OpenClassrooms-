@@ -20,9 +20,11 @@
 
 .lightbox-modal__media {
     width: 100%;
+    height: 80vh;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
 .lightbox-modal__media img,
@@ -105,4 +107,11 @@
     white-space: nowrap;
     border: 0;
     opacity: 0;
+}
+
+.lightbox-modal__media video {
+    width: 100%;
+    height: auto;
+    max-height: 80vh;
+    object-fit: contain;
 }
