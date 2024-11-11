@@ -55,11 +55,13 @@
     color: #000;
 }
 
-.modal header .close-btn {
+.modal .close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
     position: absolute;
     top: 0;
     right: 0;
-    cursor: pointer;
 }
 
 .modal .contact_button {
@@ -98,4 +100,20 @@
     border-radius: 5px;
     margin-bottom: 2.6rem;
     border: none;
+}
+
+.formData[data-error-visible="true"] .error-msg {
+    display: block;
+    color: #e54858;
+    font-size: 0.8em;
+    margin-top: 7px;
+}
+
+.formData[data-error-visible="true"] input,
+.formData[data-error-visible="true"] textarea {
+    border: 2px solid #e54858;
+}
+
+.error-msg {
+    display: none;
 }
