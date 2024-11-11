@@ -16,8 +16,3 @@
     align-items: center;
     justify-content: center;
 }
-
-.like-button.liked img,
-.like-button img.liked {
-    filter: brightness(0) saturate(100%) invert(45%) sepia(99%) saturate(1622%) hue-rotate(323deg) brightness(98%) contrast(96%);
-}
