@@ -8,11 +8,15 @@ export class MediaCard {
     }
 
     createMediaElement() {
+        const mediaContainer = document.createElement('div');
+        mediaContainer.classList.add('media-container');
+        mediaContainer.style.cursor = 'pointer';
+
         if (this.media.image) {
             const img = document.createElement('img');
             img.setAttribute('src', `assets/medias/${this.photographerName}/${this.media.image}`);
             img.setAttribute('alt', this.media.title);
-            return img;
+            mediaContainer.appendChild(img);
         } 
         
         if (this.media.video) {
@@ -21,14 +25,43 @@ export class MediaCard {
             video.setAttribute('loop', true);
             video.setAttribute('autoplay', true);
             video.setAttribute('playsinline', true);
-            video.style.pointerEvents = 'none';
 
             const source = document.createElement('source');
             source.setAttribute('src', `assets/medias/${this.photographerName}/${this.media.video}`);
             source.setAttribute('type', 'video/mp4');
             video.appendChild(source);
-            return video;
+            mediaContainer.appendChild(video);
         }
+
+        mediaContainer.addEventListener('click', () => {
+            console.log('Media clicked!');
+            this.openLightbox();
+        });
+
+        return mediaContainer;
+    }
+
+    openLightbox() {
+        const allMediaCards = Array.from(document.querySelectorAll('.media-card'));
+        const allMedias = allMediaCards.map(card => {
+            const img = card.querySelector('img');
+            const video = card.querySelector('video');
+            const title = card.querySelector('.media-info p').textContent;
+            
+            return {
+                image: img ? img.getAttribute('src').split('/').pop() : null,
+                video: video ? video.querySelector('source').getAttribute('src').split('/').pop() : null,
+                title: title,
+                photographerName: this.photographerName
+            };
+        });
+
+        const currentIndex = allMediaCards.indexOf(this.element);
+
+        ModalManager.open(ModalManager.MODAL_TYPES.LIGHTBOX, {
+            mediaList: allMedias,
+            currentIndex: currentIndex
+        });
     }
 
     createMediaInfo() {
@@ -48,25 +81,16 @@ export class MediaCard {
     }
 
     render() {
-        const mediaCard = document.createElement('figure');
-        mediaCard.classList.add('media-card');
+        const article = document.createElement('article');
+        article.classList.add('media-card');
+        this.element = article;
 
         const mediaElement = this.createMediaElement();
         const mediaInfo = this.createMediaInfo();
 
-        mediaCard.appendChild(mediaElement);
-        mediaCard.appendChild(mediaInfo);
+        article.appendChild(mediaElement);
+        article.appendChild(mediaInfo);
 
-        return mediaCard;
-    }
-
-    openLightbox() {
-        const allMedias = this.getAllMedias();
-        const currentIndex = this.getCurrentIndex();
-        
-        ModalManager.open(ModalManager.MODAL_TYPES.LIGHTBOX, {
-            mediaList: allMedias,
-            currentIndex: currentIndex
-        });
+        return article;
     }
 }
