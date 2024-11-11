@@ -148,6 +148,10 @@ export function photographerTemplate(photographerState) {
             // Vérifie si le média a déjà été liké
             const isLiked = localStorage.getItem(`liked-${media.id}`) === 'true';
             
+            // Récupère le nombre de likes stocké ou utilise la valeur initiale
+            const storedLikes = localStorage.getItem(`likes-${media.id}`);
+            media.likes = storedLikes ? parseInt(storedLikes) : media.likes;
+
             // Conteur de likes de medias infos
             const likesCount = document.createElement('span');
             likesCount.classList.add('likes-count');
