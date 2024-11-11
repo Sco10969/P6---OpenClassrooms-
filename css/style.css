@@ -1,4 +1,10 @@
 @import url("photographer.css");
+@import url("../scripts/components/PhotographerHeader/PhotographerHeader.css");
+@import url("../scripts/components/MediaCard/MediaCard.css");
+@import url("../scripts/components/LikeButton/LikeButton.css");
+@import url("../scripts/components/TotalLikes/TotalLikes.css");
+@import url("../scripts/components/LightboxModal/LightboxModal.css");
+@import url("../scripts/components/ContactFormModal/ContactFormModal.css");
 
 * {
     padding: 0;
@@ -35,7 +41,7 @@ h1 {
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    gap: 68px;
+    gap: 40px;
     margin: 0 auto;
 }
 

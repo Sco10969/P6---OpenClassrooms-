@@ -1,54 +1,76 @@
-import { photographerTemplate } from '../templates/photographer.js';
-import { displayModal, closeModal } from '../utils/contactForm.js';
+import { ModalManager } from '../utils/ModalManager.js';
+import { MediaCard } from '../components/MediaCard/MediaCard.js';
+import { PhotographerHeader } from '../components/PhotographerHeader/PhotographerHeader.js';
+import { TotalLikes } from '../components/TotalLikes/TotalLikes.js';
 
-function getPhotographerIdFromUrl() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
-    console.log("Photographer ID:", id);
-    return id;
+function getPhotographerId() {
+    return new URLSearchParams(window.location.search).get('id');
 }
 
-async function getPhotographer() {
+async function fetchPhotographerData() {
     try {
         const response = await fetch('./data/photographers.json');
-        if (response.ok) {
-            const data = await response.json();
-            const photographerId = getPhotographerIdFromUrl();
-            const photographerData = data.photographers.find(photographer => photographer.id == photographerId);
-            console.log("Photographer Data:", photographerData);
+        if (!response.ok) throw new Error('Erreur lors de la récupération des données');
 
-            const mediaData = data.media.filter(media => media.photographerId == photographerId);
-            console.log("Media Data:", mediaData);
-
-            return { photographerData, mediaData };
-        } else {
-            console.error("Failed to fetch photographers data");
-            return null;
-        }
+        const { photographers, media } = await response.json();
+        const photographerId = getPhotographerId();
+        
+        return {
+            photographerData: photographers.find(photographer => photographer.id == photographerId),
+            mediaData: media.filter(mediaItem => mediaItem.photographerId == photographerId)
+        };
     } catch (error) {
-        console.error("Error fetching photographers data:", error);
+        console.error("Erreur:", error);
         return null;
     }
 }
 
-async function displayData(photographerState) {
-    const photographersHeader = document.querySelector(".photographer_header");
-    const mediaSection = document.querySelector(".media_section");
+function renderPage(data) {
+    if (!data) return;
 
-    const photographerModel = photographerTemplate(photographerState);
-    const photographerHeaderDOM = photographerModel.getPhotographerHeaderDOM();
-    photographersHeader.appendChild(photographerHeaderDOM);
+    const { photographerData, mediaData } = data;
+    
+    // Rendu du header
+    const header = new PhotographerHeader(photographerData);
+    document.querySelector('.photographer_header').appendChild(header.render());
 
-    const mediaSectionDOM = photographerModel.getMediaSectionDOM();
-    mediaSectionDOM.forEach(card => mediaSection.appendChild(card));
+    // Rendu des médias
+    const mediaSection = document.querySelector('.media_section');
+    mediaData.forEach(media => {
+        const mediaCard = new MediaCard(media, photographerData.name);
+        mediaSection.appendChild(mediaCard.render());
+    });
+
+    // Ajout de l'overlay TotalLikes
+    const totalLikes = new TotalLikes(mediaData, photographerData.price);
+    document.querySelector('.container').appendChild(totalLikes.render());
+
+    // Mise à jour du total lors des likes
+    document.addEventListener('likeUpdated', () => {
+        totalLikes.update();
+    });
+}
+
+function initEventListeners() {
+    const contactButton = document.querySelector('.contact_button');
+    const modal = document.querySelector('#contact_modal');
+    const closeButton = modal?.querySelector('img[src*="close"]');
+
+    contactButton?.addEventListener('click', () => {
+        const photographerName = document.querySelector('.photographer_header .name')?.textContent;
+        ModalManager.open(ModalManager.MODAL_TYPES.CONTACT, { photographerName });
+    });
+
+    closeButton?.addEventListener('click', () => ModalManager.closeModal());
+    
+    // Éviter la propagation sur le contenu de la modal
+    modal?.querySelector('.modal')?.addEventListener('click', e => e.stopPropagation());
 }
 
 async function init() {
-    const photographerState = await getPhotographer();
-    displayData(photographerState);
+    const photographerData = await fetchPhotographerData();
+    renderPage(photographerData);
+    initEventListeners();
 }
 
-window.onload = init;
-
-document.querySelector('.contact_button').addEventListener('click', displayModal);
-document.querySelector('#contact_modal').addEventListener('click', closeModal);
+window.addEventListener('load', init);

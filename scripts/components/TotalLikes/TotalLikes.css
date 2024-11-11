@@ -1,0 +1,32 @@
+.total-likes-overlay {
+    position: fixed;
+    bottom: 0;
+    right: 3.6rem;
+    background-color: #DB8876;
+    border-radius: 5px 5px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem;
+    width: 376px;
+    z-index: 999;
+}
+
+.total-likes-overlay .likes-count {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 2.4rem;
+    font-weight: 500;
+}
+
+.total-likes-overlay .likes-count img {
+    width: 21px;
+    height: 24px;
+    filter: brightness(0);
+}
+
+.total-likes-overlay .price {
+    font-size: 2.4rem;
+    font-weight: 500;
+}

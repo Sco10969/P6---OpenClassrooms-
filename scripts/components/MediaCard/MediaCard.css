@@ -1,0 +1,36 @@
+.media-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0;
+}
+
+.media-card img,
+.media-card video {
+    width: 350px;
+    height: 351px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.media-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding-top: 10px;
+}
+
+.media-info p {
+    font-size: 2.4rem;
+    color: #901C1C;
+    margin: 0;
+}
+
+/* Style pour la grille des médias */
+.media_section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 95px;
+    row-gap: 20px;
+}

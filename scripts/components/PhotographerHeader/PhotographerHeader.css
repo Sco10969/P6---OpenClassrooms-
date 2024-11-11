@@ -1,0 +1,65 @@
+.card-index.detail-page {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background-color: #FAFAFA;
+    align-items: center;
+    column-gap: 180px;
+    height: 313px;
+    margin-bottom: 20px;
+    padding: 0 50px;
+}
+
+.header-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    width: 358px;
+    gap: 2rem;
+}
+
+.header-content .name {
+    color: #D3573C;
+    font-size: 6.4rem;
+    margin: 0;
+}
+
+.header-content .location {
+    color: #901C1C;
+    font-size: 2.4rem;
+    margin: 0;
+}
+
+.header-content .tagline {
+    color: #525252;
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.contact_button {
+    width: 170px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    padding: 22px 11px;
+    background-color: #901C1C;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    justify-self: center;
+}
+
+.img-container {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0px 4px 12px 0px #00000040;
+}
+
+.img-container .portrait {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    transform: scale(1.4);
+}
