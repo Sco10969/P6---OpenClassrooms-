@@ -145,10 +145,9 @@ export function photographerTemplate(photographerState) {
             const likesContainer = document.createElement('div');
             likesContainer.classList.add('likes-container');
 
-            // Récupère les likes stockés dans le localStorage
-            const storedLikes = localStorage.getItem(`likes-${media.id}`);
-            media.likes = storedLikes ? parseInt(storedLikes, 10) : media.likes;
-
+            // Vérifie si le média a déjà été liké
+            const isLiked = localStorage.getItem(`liked-${media.id}`) === 'true';
+            
             // Conteur de likes de medias infos
             const likesCount = document.createElement('span');
             likesCount.classList.add('likes-count');
@@ -157,10 +156,33 @@ export function photographerTemplate(photographerState) {
             // Bouton de like de medias infos
             const likeButton = document.createElement('button');
             likeButton.classList.add('like-button');
-            likeButton.appendChild(createHeartIcon());
+            const heartIcon = createHeartIcon();
+            
+            // Applique la classe 'liked' si déjà liké
+            if (isLiked) {
+                heartIcon.classList.add('liked');
+                likeButton.classList.add('liked');
+            }
+            
+            likeButton.appendChild(heartIcon);
 
             likeButton.addEventListener('click', () => {
-                media.likes += 1;
+                const isCurrentlyLiked = likeButton.classList.contains('liked');
+                
+                if (isCurrentlyLiked) {
+                    // Unlike
+                    media.likes -= 1;
+                    likeButton.classList.remove('liked');
+                    heartIcon.classList.remove('liked');
+                    localStorage.setItem(`liked-${media.id}`, 'false');
+                } else {
+                    // Like
+                    media.likes += 1;
+                    likeButton.classList.add('liked');
+                    heartIcon.classList.add('liked');
+                    localStorage.setItem(`liked-${media.id}`, 'true');
+                }
+                
                 likesCount.textContent = media.likes;
                 localStorage.setItem(`likes-${media.id}`, media.likes);
             });
