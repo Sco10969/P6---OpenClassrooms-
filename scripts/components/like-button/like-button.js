@@ -1,4 +1,4 @@
-import { LocalStorageManager } from '../../utils/localStorage.js';
+import { LocalStorageManager } from '../../utils/local-storage.js';
 
 export class LikeButton {
     constructor(mediaId, initialLikes) {
@@ -18,12 +18,12 @@ export class LikeButton {
     toggleLike() {
         this.isLiked = !this.isLiked;
         this.likes = this.isLiked ? this.likes + 1 : this.likes - 1;
-        
+
         LocalStorageManager.saveLikeState(this.mediaId, this.isLiked);
         LocalStorageManager.saveLikes(this.mediaId, this.likes);
-        
+
         document.dispatchEvent(new CustomEvent('likeUpdated'));
-        
+ 
         return {
             likes: this.likes,
             isLiked: this.isLiked

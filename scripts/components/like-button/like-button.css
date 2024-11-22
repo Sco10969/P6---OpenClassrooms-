@@ -1,0 +1,35 @@
+.likes-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.likes-count {
+    font-size: 2.4rem;
+    color: #901C1C;
+}
+
+.like-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin-left: 5px;
+}
+
+.like-button img {
+    width: 21px;
+    height: 24px;
+    transition: transform 0.3s ease;
+}
+
+.like-button:hover img {
+    transform: scale(1.1);
+}
+
+.like-button.liked img {
+    filter: brightness(0) saturate(100%) invert(77%) sepia(38%) saturate(299%) hue-rotate(324deg) brightness(84%) contrast(82%);
+}

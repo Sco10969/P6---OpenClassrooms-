@@ -1,6 +1,11 @@
 /**
  * Classe utilitaire pour gérer le stockage local des likes
  */
+
+/**
+ * TODO : A rework
+ */
+
 export class LocalStorageManager {
     /**
      * Récupère le nombre de likes stocké pour un média

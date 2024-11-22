@@ -1,5 +1,5 @@
-import { PhotographerHeader } from '../components/PhotographerHeader/PhotographerHeader.js';
-import { MediaCard } from '../components/MediaCard/MediaCard.js';
+import { PhotographerHeader } from '../components/photographer-header/photographer-header.js';
+import { MediaCard } from '../components/media-card/media-card.js';
 
 /**
  * Template pour la page photographe

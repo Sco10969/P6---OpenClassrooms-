@@ -1,10 +1,10 @@
-@import url("photographer.css");
-@import url("../scripts/components/PhotographerHeader/PhotographerHeader.css");
-@import url("../scripts/components/MediaCard/MediaCard.css");
-@import url("../scripts/components/LikeButton/LikeButton.css");
-@import url("../scripts/components/TotalLikes/TotalLikes.css");
-@import url("../scripts/components/LightboxModal/LightboxModal.css");
-@import url("../scripts/components/ContactFormModal/ContactFormModal.css");
+@import url("./photographer.css");
+@import url("../scripts/components/photographer-header/photographer-header.css");
+@import url("../scripts/components/media-card/media-card.css");
+@import url("../scripts/components/like-button/like-button.css");
+@import url("../scripts/components/total-likes/total-likes.css");
+@import url("../scripts/components/modals/lightbox-modal/lightbox-modal.css");
+@import url("../scripts/components/modals/contact-modal/contact-modal.css");
 
 * {
     padding: 0;
