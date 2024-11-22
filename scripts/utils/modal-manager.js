@@ -10,10 +10,6 @@ export const ModalManager = {
      * @param {Function} ModalClass - Constructeur de la modal
      */
     register(modalId, ModalClass) {
-        if (modalConstructors.has(modalId)) {
-            console.error(`Une modal avec l'ID ${modalId} est déjà enregistrée`);
-            return;
-        }
         modalConstructors.set(modalId, ModalClass);
     },
 
@@ -23,40 +19,29 @@ export const ModalManager = {
      * @param {Object} params - Paramètres pour le constructeur de la modal
      */
     open(modalId, params = {}) {
-        // Fermer toutes les modals ouvertes
         this.closeAll();
-
-        // Créer une nouvelle instance
+        
         const ModalClass = modalConstructors.get(modalId);
-
-        // Supprimer l'ancienne instance si elle existe
-        const existingModalIndex = modals.findIndex(modal => modal.id === modalId);
-        if (existingModalIndex !== -1) {
-            const oldModal = modals[existingModalIndex];
-            if (oldModal.element) {
-                oldModal.element.remove(); // Nettoyer le DOM
-            }
-            modals.splice(existingModalIndex, 1);
-        }
-
-        // Créer et configurer la nouvelle instance
         const instance = new ModalClass(params);
+        
         const modalToOpen = {
             id: modalId,
             element: instance.element,
             instance: instance,
-            isOpen: false
+            isOpen: true
         };
 
-        modals.push(modalToOpen);
+        // Ajouter le bouton close
+        const modalContent = modalToOpen.element.querySelector('.modal-content');
+        if (modalContent) {
+            modalContent.insertAdjacentElement('afterbegin', this.createCloseButton(modalToOpen));
+        }
 
         // Configurer l'affichage
         modalToOpen.element.style.display = "flex";
-        modalToOpen.element.style.justifyContent = "center";
-        modalToOpen.element.style.alignItems = "center";
-        modalToOpen.isOpen = true;
         document.body.style.overflow = "hidden";
 
+        modals.push(modalToOpen);
         this.addListeners(modalToOpen);
     },
 
@@ -66,12 +51,6 @@ export const ModalManager = {
      */
     close(modal) {
         if (!modal?.element) return;
-
-        // Appeler la méthode close de l'instance si elle existe
-        if (modal.instance && typeof modal.instance.close === 'function') {
-            modal.instance.close();
-        }
-
         modal.element.style.display = "none";
         modal.isOpen = false;
         document.body.style.overflow = "auto";
@@ -143,9 +122,28 @@ export const ModalManager = {
             this.close(modal);
         }
         modals.splice(modalIndex, 1);
+    },
+
+    /**
+     * Crée un bouton de fermeture pour une modal
+     * @param {Object} modal - La modal concernée
+     * @returns {HTMLElement} - Le bouton de fermeture créé
+     */
+    createCloseButton(modal) {
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'modal-close';
+        closeBtn.setAttribute('aria-label', 'Fermer');
+
+        const closeImg = document.createElement('img');
+        closeImg.src = 'assets/icons/close.svg';
+        closeImg.alt = '';
+
+        closeBtn.appendChild(closeImg);
+        closeBtn.onclick = () => this.close(modal);
+
+        return closeBtn;
     }
 };
-
-// Exposer pour le debug
+// debug
 window.ModalManager = ModalManager;
 window.getModals = () => console.log(modals); // Pour voir les modales enregistrées 

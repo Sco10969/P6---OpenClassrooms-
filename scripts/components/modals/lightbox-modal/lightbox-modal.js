@@ -58,7 +58,6 @@ export class LightboxModal {
         content.className = 'modal-content lightbox-content';
 
         content.append(
-            this.createCloseButton(),
             this.createNavigation('prev'),
             this.createMediaContainer(),
             this.createNavigation('next'),
@@ -66,21 +65,6 @@ export class LightboxModal {
         );
 
         return content;
-    }
-
-    createCloseButton() {
-        const closeBtn = document.createElement('button');
-        closeBtn.className = 'lightbox-close';
-        closeBtn.setAttribute('aria-label', 'Fermer');
-
-        const closeImg = document.createElement('img');
-        closeImg.src = 'assets/icons/close.svg';
-        closeImg.alt = '';
-
-        closeBtn.appendChild(closeImg);
-        closeBtn.onclick = () => ModalManager.close(this);
-
-        return closeBtn;
     }
 
     createNavigation(direction) {
@@ -140,7 +124,11 @@ export class LightboxModal {
             this.mediaContainer.appendChild(img);
         } else if (media.video) {
             const video = document.createElement('video');
-            video.controls = true;
+            video.autoplay = true;
+            video.loop = true;
+            video.muted = true;
+            video.controls = false;
+            video.playsInline = true;
             
             const source = document.createElement('source');
             source.src = `assets/medias/${media.photographerName}/${media.video}`;

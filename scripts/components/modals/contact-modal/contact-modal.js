@@ -49,23 +49,10 @@ export class ContactModal {
         photographerSpan.className = 'photographer-name';
         photographerSpan.textContent = photographerName;
 
-        // Bouton fermer
-        const closeBtn = document.createElement('button');
-        closeBtn.className = 'close-btn';
-        closeBtn.setAttribute('aria-label', 'Fermer');
-
-        const closeImg = document.createElement('img');
-        closeImg.src = 'assets/icons/close.svg';
-        closeImg.alt = '';
-        closeBtn.appendChild(closeImg);
-
-        closeBtn.onclick = () => ModalManager.close(this);
-
-        // Ajout du titre et du nom dans le container ✨
+        // Ajout du titre et du nom dans le container
         titleContainer.append(title, photographerSpan);
 
-        // Ajout du container et du bouton dans le header ✨
-        header.append(titleContainer, closeBtn);
+        header.append(titleContainer);
         return header;
     }
 

@@ -30,7 +30,7 @@ export class PhotographerHeader {
         contactButton.className = 'contact_button';
         contactButton.textContent = 'Contactez-moi';
         contactButton.setAttribute('aria-label', 'Contacter le photographe');
-        
+
         contactButton.addEventListener('click', () => {
             ModalManager.open('contact', this.#photographer.name);
         });
