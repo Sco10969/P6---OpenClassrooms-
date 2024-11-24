@@ -1,120 +1,94 @@
-import { ModalManager } from '../../../utils/modal-manager.js';
+import { ModalTemplate } from '../../../utils/modal-template.js';
 
-export class LightboxModal {
-    constructor(params) {
-        // 1. Création de la structure
-        const modalElement = document.createElement('div');
-        modalElement.className = 'lightbox-modal';
-        modalElement.setAttribute('role', 'dialog');
-        modalElement.setAttribute('aria-label', 'Image Viewer');
+export class LightboxModal extends ModalTemplate {
+    constructor(photographerMedia) {
+        super('Galerie', 'lightbox-modal');
+        this.mediaList = photographerMedia.mediaList;
+        this.currentIndex = photographerMedia.currentIndex || 0;
+        this.buildLightbox();
+    }
 
-        // 2. Création du contenu
-        const content = this.createContent();
-        modalElement.appendChild(content);
+    buildLightbox() {
+        const lightboxStructure = {
+            tag: 'div',
+            class: 'modal-content lightbox-content',
+            children: [
+                // Wrapper pour le contenu
+                {
+                    tag: 'div',
+                    class: 'lightbox-wrapper',
+                    children: [
+                        // Bouton précédent
+                        {
+                            tag: 'button',
+                            class: 'lightbox-prev',
+                            attrs: { 'aria-label': 'Image précédente' },
+                            children: [{
+                                tag: 'img',
+                                attrs: {
+                                    src: 'assets/icons/nav_prev.svg',
+                                    alt: ''
+                                }
+                            }]
+                        },
+                        // Container média
+                        {
+                            tag: 'div',
+                            class: 'lightbox-media'
+                        },
+                        // Bouton suivant
+                        {
+                            tag: 'button',
+                            class: 'lightbox-next',
+                            attrs: { 'aria-label': 'Image suivante' },
+                            children: [{
+                                tag: 'img',
+                                attrs: {
+                                    src: 'assets/icons/nav_next.svg',
+                                    alt: ''
+                                }
+                            }]
+                        },
+                        // Titre
+                        {
+                            tag: 'h2',
+                            class: 'lightbox-title'
+                        }
+                    ]
+                }
+            ]
+        };
 
-        // 3. Stockage des références
-        this.element = modalElement;
+        const content = this.buildElement(lightboxStructure);
+        const closeButton = this.createCloseButton();
+        content.appendChild(closeButton);
+
+        // Stockage des références
         this.mediaContainer = content.querySelector('.lightbox-media');
         this.title = content.querySelector('.lightbox-title');
+
+        // Events de navigation
+        content.querySelector('.lightbox-prev').onclick = () => this.prev();
+        content.querySelector('.lightbox-next').onclick = () => this.next();
         
-        // 4. Initialisation avec les paramètres
-        if (params && params.mediaList) {
-            this.mediaList = params.mediaList;
-            this.currentIndex = params.currentIndex || 0;
-            this.showMedia(this.currentIndex);
-        }
-
-        // 5. Ajout au DOM
-        document.body.appendChild(modalElement);
-
-        // 6. Configuration des événements
-        this.setupEvents();
-    }
-
-    setupEvents() {
         // Navigation clavier
-        this.keyboardHandler = (e) => {
-            switch(e.key) {
-                case 'ArrowLeft': 
-                    e.preventDefault();
-                    this.prev(); 
-                    break;
-                case 'ArrowRight': 
-                    e.preventDefault();
-                    this.next(); 
-                    break;
-            }
-        };
-        
-        // Gestion du focus
-        this.element.setAttribute('tabindex', '-1');
-        this.element.focus();
-        
-        document.addEventListener('keydown', this.keyboardHandler);
-    }
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowLeft') this.prev();
+            if (e.key === 'ArrowRight') this.next();
+        });
 
-    createContent() {
-        const content = document.createElement('div');
-        content.className = 'modal-content lightbox-content';
-
-        content.append(
-            this.createNavigation('prev'),
-            this.createMediaContainer(),
-            this.createNavigation('next'),
-            this.createTitle()
-        );
-
-        return content;
-    }
-
-    createNavigation(direction) {
-        const button = document.createElement('button');
-        button.className = `lightbox-${direction}`;
-        button.setAttribute('aria-label', direction === 'prev' ? 'Image précédente' : 'Image suivante');
-
-        const img = document.createElement('img');
-        img.src = `assets/icons/nav_${direction}.svg`;
-        img.alt = '';
-
-        button.appendChild(img);
-        button.onclick = () => this[direction]();
-
-        return button;
-    }
-
-    createMediaContainer() {
-        const container = document.createElement('div');
-        container.className = 'lightbox-media';
-        return container;
-    }
-
-    createTitle() {
-        const title = document.createElement('h2');
-        title.className = 'lightbox-title';
-        return title;
+        this.setContent(content);
+        this.showMedia(this.currentIndex);
     }
 
     showMedia(index) {
-        console.log('📸 Tentative d\'affichage du média:', index);
-        console.log('📑 Liste des médias disponibles:', this.mediaList);
-
-        // Vérification de l'index
         if (index < 0 || index >= this.mediaList.length) {
-            console.error(`❌ Index invalide: ${index}. Utilisation de l'index 0.`);
             index = 0;
         }
 
         this.currentIndex = index;
         const media = this.mediaList[index];
 
-        if (!media) {
-            console.error('❌ Média non trouvé pour l\'index:', index);
-            return;
-        }
-
-        console.log('🖼️ Affichage du média:', media);
-
-        // ✨ Nettoyer complètement le conteneur
         this.mediaContainer.innerHTML = '';
 
         if (media.image) {
@@ -138,10 +112,7 @@ export class LightboxModal {
             this.mediaContainer.appendChild(video);
         }
 
-        // ✨ Mettre à jour le titre
         this.title.textContent = media.title;
-        
-        console.log('✅ Média affiché avec succès');
     }
 
     prev() {
@@ -154,52 +125,8 @@ export class LightboxModal {
         this.showMedia(newIndex);
     }
 
-    setMediaList(mediaList) {
-        this.mediaList = mediaList;
-    }
-
-    // Ajout de la méthode de gestion du focus ✨
-    handleTabKey(e) {
-        if (e.key === 'Tab') {
-            const focusableElements = this.element.querySelectorAll(
-                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-            );
-            const firstFocusable = focusableElements[0];
-            const lastFocusable = focusableElements[focusableElements.length - 1];
-
-            if (e.shiftKey) {
-                if (document.activeElement === firstFocusable) {
-                    lastFocusable.focus();
-                    e.preventDefault();
-                }
-            } else {
-                if (document.activeElement === lastFocusable) {
-                    firstFocusable.focus();
-                    e.preventDefault();
-                }
-            }
-        }
-    }
-
-    // ✨ Nouvelle méthode pour réinitialiser l'état
-    reset(params) {
-        if (params && params.mediaList) {
-            this.mediaList = params.mediaList;
-            this.currentIndex = params.currentIndex || 0;
-            this.showMedia(this.currentIndex);
-        }
-    }
-
-    // ✨ Mise à jour de la méthode close
     close() {
-        // Nettoyage des événements
-        document.removeEventListener('keydown', this.keyboardHandler);
-        
-        // Nettoyage du contenu
-        this.mediaContainer.innerHTML = '';
-        this.title.textContent = '';
-        this.currentIndex = 0;
-        this.mediaList = [];
+        super.close();
     }
 }
 

@@ -1,4 +1,4 @@
-import { ModalManager } from '../../utils/modal-manager.js';
+import { ContactModal } from '../modals/contact-modal/contact-modal.js';
 
 export class PhotographerHeader {
     #photographer;
@@ -8,40 +8,71 @@ export class PhotographerHeader {
     }
 
     render() {
-        const article = document.createElement('article');
-        article.className = 'photographer_header';
+        const headerStructure = {
+            tag: 'article',
+            class: 'photographer_header',
+            children: [
+                // Info Section
+                {
+                    tag: 'div',
+                    class: 'photographer_info',
+                    children: [
+                        {
+                            tag: 'h1',
+                            class: 'name',
+                            text: this.#photographer.name
+                        },
+                        {
+                            tag: 'p',
+                            class: 'location',
+                            text: `${this.#photographer.city}, ${this.#photographer.country}`
+                        },
+                        {
+                            tag: 'p',
+                            class: 'tagline',
+                            text: this.#photographer.tagline
+                        }
+                    ]
+                },
+                // Contact Button
+                {
+                    tag: 'button',
+                    class: 'contact_button',
+                    text: 'Contactez-moi',
+                    attrs: {
+                        'aria-label': 'Contacter le photographe'
+                    }
+                },
+                // Portrait
+                {
+                    tag: 'img',
+                    attrs: {
+                        src: `assets/photographers/${this.#photographer.portrait}`,
+                        alt: this.#photographer.name
+                    }
+                }
+            ]
+        };
 
-        const info = document.createElement('div');
-        info.className = 'photographer_info';
+        const header = this.buildElement(headerStructure);
+        
+        // Event sur le bouton contact
+        const contactButton = header.querySelector('.contact_button');
+        contactButton.onclick = () => {
+            const contactModal = new ContactModal(this.#photographer.name);
+            contactModal.open();
+        };
 
-        const name = document.createElement('h1');
-        name.className = 'name';
-        name.textContent = this.#photographer.name;
+        return header;
+    }
 
-        const location = document.createElement('p');
-        location.className = 'location';
-        location.textContent = `${this.#photographer.city}, ${this.#photographer.country}`;
-
-        const tagline = document.createElement('p');
-        tagline.className = 'tagline';
-        tagline.textContent = this.#photographer.tagline;
-
-        const contactButton = document.createElement('button');
-        contactButton.className = 'contact_button';
-        contactButton.textContent = 'Contactez-moi';
-        contactButton.setAttribute('aria-label', 'Contacter le photographe');
-
-        contactButton.addEventListener('click', () => {
-            ModalManager.open('contact', this.#photographer.name);
-        });
-
-        const portrait = document.createElement('img');
-        portrait.src = `assets/photographers/${this.#photographer.portrait}`;
-        portrait.alt = this.#photographer.name;
-
-        info.append(name, location, tagline);
-        article.append(info, contactButton, portrait);
-
-        return article;
+    buildElement({ tag, class: className, style, attrs, text, children = [] }) {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (style) Object.assign(element.style, style);
+        if (attrs) Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value));
+        if (text) element.textContent = text;
+        children.forEach(child => element.appendChild(this.buildElement(child)));
+        return element;
     }
 }

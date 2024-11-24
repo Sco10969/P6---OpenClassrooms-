@@ -1,3 +1,107 @@
+export class ModalGeneric {
+    constructor(title, parent) {
+        this.title = title;
+        this.parent = parent;
+        this.isOpen = false;
+        this.element = this.createModalStructure();
+        this.contentContainer = this.element.querySelector('.modal-wrapper-content');
+        this.addListeners();
+    }
+
+    createModalStructure() {
+        const modal = document.createElement('div');
+        const overlay = document.createElement('div');
+        const wrapper = document.createElement('div');
+        const content = document.createElement('div');
+        const close = document.createElement('button');
+
+        modal.className = 'modal';
+        overlay.className = 'modal-overlay';
+        wrapper.className = 'modal-wrapper';
+        content.className = 'modal-wrapper-content';
+        close.className = 'modal-close';
+
+        if (this.title) {
+            const titleEl = document.createElement('h2');
+            titleEl.className = 'modal-title';
+            titleEl.textContent = this.title;
+            content.appendChild(titleEl);
+        }
+
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'modal-close';
+        closeBtn.setAttribute('aria-label', 'Fermer');
+        closeBtn.src = 'assets/icons/close.svg';
+
+        wrapper.appendChild(content);
+        wrapper.appendChild(close);
+        modal.appendChild(overlay);
+        modal.appendChild(wrapper);
+        
+        this.parent.appendChild(modal);
+        return modal;
+    }
+
+    addListeners() {
+        const closeModal = () => this.close();
+
+        this.element.querySelector('.modal-close').addEventListener('click', closeModal);
+        this.element.querySelector('.modal-overlay').addEventListener('click', closeModal);
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape' && this.isOpen) closeModal();
+        });
+    }
+
+    open() {
+        this.isOpen = true;
+        this.element.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    close() {
+        this.isOpen = false;
+        this.element.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    setContent(content) {
+        const container = this.contentContainer;
+        container.innerHTML = '';
+        
+        if (this.title) {
+            const title = document.createElement('h2');
+            title.className = 'modal-title';
+            title.textContent = this.title;
+            container.appendChild(title);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Notre tableau de modals et leurs constructeurs
 const modalConstructors = new Map();
 const modals = [];

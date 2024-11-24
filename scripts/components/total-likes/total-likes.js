@@ -1,65 +1,76 @@
 import { LocalStorageManager } from '../../utils/local-storage.js';
 
 export class TotalLikes {
-    #mediaList;
-    #photographerPrice;
-    #totalLikes;
-    #element;
-
     constructor(mediaList, photographerPrice) {
-        this.#mediaList = mediaList;
-        this.#photographerPrice = photographerPrice;
-        this.#totalLikes = this.#calculateTotalLikes();
+        const structure = {
+            storage: new LocalStorageManager(),
+            list: mediaList,
+            price: photographerPrice
+        };
+
+        this.storage = structure.storage;
+        this.mediaList = structure.list;
+        this.photographerPrice = structure.price;
+        this.totalLikes = this.calculateTotalLikes();
         
         // Écouter les événements de like
         document.addEventListener('likeUpdated', () => this.update());
     }
 
-    #calculateTotalLikes() {
-        return LocalStorageManager.getTotalLikes(this.#mediaList);
-    }
-
-    #createLikesCounter() {
-        const likesContainer = document.createElement('div');
-        likesContainer.classList.add('likes-count');
-        
-        const likesNumber = document.createElement('span');
-        likesNumber.textContent = this.#totalLikes;
-        
-        const heartIcon = document.createElement('img');
-        heartIcon.src = 'assets/icons/favorite-24px 1.svg';
-        heartIcon.alt = 'likes';
-
-        likesContainer.append(likesNumber, heartIcon);
-        return likesContainer;
-    }
-
-    #createPriceTag() {
-        const price = document.createElement('div');
-        price.classList.add('price');
-        price.textContent = `${this.#photographerPrice}€ / jour`;
-        return price;
-    }
-
     render() {
-        const overlay = document.createElement('div');
-        overlay.classList.add('total-likes-overlay');
+        const overlayStructure = {
+            tag: 'div',
+            class: 'total-likes-overlay',
+            children: [
+                // Compteur de likes
+                {
+                    tag: 'div',
+                    class: 'likes-count',
+                    children: [
+                        {
+                            tag: 'span',
+                            text: this.totalLikes
+                        },
+                        {
+                            tag: 'img',
+                            attrs: {
+                                src: 'assets/icons/favorite-24px 1.svg',
+                                alt: 'likes'
+                            }
+                        }
+                    ]
+                },
+                // Prix
+                {
+                    tag: 'div',
+                    class: 'price',
+                    text: `${this.photographerPrice}€ / jour`
+                }
+            ]
+        };
 
-        overlay.append(
-            this.#createLikesCounter(),
-            this.#createPriceTag()
-        );
+        this.element = this.buildElement(overlayStructure);
+        return this.element;
+    }
 
-        this.#element = overlay;
-        return overlay;
+    buildElement({ tag, class: className, attrs, text, children = [] }) {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (attrs) Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value));
+        if (text) element.textContent = text;
+        children.forEach(child => element.appendChild(this.buildElement(child)));
+        return element;
+    }
+
+    calculateTotalLikes() {
+        return this.storage.getTotalLikes(this.mediaList);
     }
 
     update() {
-        this.#totalLikes = this.#calculateTotalLikes();
-        
-        const likesNumber = this.#element?.querySelector('.likes-count span');
+        this.totalLikes = this.calculateTotalLikes();
+        const likesNumber = this.element?.querySelector('.likes-count span');
         if (likesNumber) {
-            likesNumber.textContent = this.#totalLikes;
+            likesNumber.textContent = this.totalLikes;
         }
     }
 }

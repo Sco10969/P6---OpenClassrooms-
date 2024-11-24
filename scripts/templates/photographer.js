@@ -6,61 +6,72 @@ import { MediaCard } from '../components/media-card/media-card.js';
  * @param {Object} photographerState Les données du photographe et ses médias
  */
 export function photographerTemplate(photographerState) {
-    const { photographerData, mediaData } = photographerState;
+    const { photographerData } = photographerState;
 
     /**
      * Génère la carte du photographe pour la page d'index
      */
     function getUserCardDOM() {
-        const { name, portrait, city, country, tagline, price, id } = photographerData;
-        const picture = `assets/photographers/${portrait}`;
+        const cardStructure = {
+            tag: 'figure',
+            class: 'card-index',
+            children: [
+                // Lien principal
+                {
+                    tag: 'a',
+                    class: 'link',
+                    attrs: {
+                        href: `./photographer.html?id=${photographerData.id}`,
+                        'aria-label': `Voir le profil de ${photographerData.name}`
+                    },
+                    children: [
+                        // Container image
+                        {
+                            tag: 'div',
+                            class: 'img-container',
+                            children: [{
+                                tag: 'img',
+                                class: 'portrait',
+                                attrs: {
+                                    src: `assets/photographers/${photographerData.portrait}`,
+                                    alt: `Portrait de ${photographerData.name}`
+                                }
+                            }]
+                        },
+                        // Nom
+                        {
+                            tag: 'h2',
+                            class: 'name',
+                            text: photographerData.name
+                        }
+                    ]
+                },
+                // Description
+                {
+                    tag: 'div',
+                    class: 'description',
+                    children: [
+                        {
+                            tag: 'span',
+                            class: 'location',
+                            text: `${photographerData.city}, ${photographerData.country}`
+                        },
+                        {
+                            tag: 'p',
+                            class: 'tagline',
+                            text: photographerData.tagline
+                        },
+                        {
+                            tag: 'data',
+                            class: 'price',
+                            text: `${photographerData.price}€/jour`
+                        }
+                    ]
+                }
+            ]
+        };
 
-        const card = document.createElement('figure');
-        card.classList.add('card-index');
-
-        const link = document.createElement('a');
-        link.classList.add('link');
-        link.setAttribute("href", `./photographer.html?id=${id}`);
-        link.setAttribute('aria-label', `Voir le profil de ${name}`);
-
-        const imgContainer = document.createElement('div');
-        imgContainer.classList.add('img-container');
-
-        const img = document.createElement('img');
-        img.classList.add('portrait');
-        img.setAttribute("src", picture);
-        img.setAttribute("alt", `Portrait de ${name}`);
-
-        const h2 = document.createElement('h2');
-        h2.classList.add('name');
-        h2.textContent = name;
-
-        const description = document.createElement('div');
-        description.classList.add('description');
-
-        const location = document.createElement('span');
-        location.classList.add('location');
-        location.textContent = `${city}, ${country}`;
-
-        const taglineElement = document.createElement('p');
-        taglineElement.classList.add('tagline');
-        taglineElement.textContent = tagline;
-
-        const priceElement = document.createElement('data');
-        priceElement.classList.add('price');
-        priceElement.textContent = `${price}€/jour`;
-
-        // Construction du DOM
-        imgContainer.appendChild(img);
-        link.appendChild(imgContainer);
-        link.appendChild(h2);
-        description.appendChild(location);
-        description.appendChild(taglineElement);
-        description.appendChild(priceElement);
-        card.appendChild(link);
-        card.appendChild(description);
-
-        return card;
+        return buildElement(cardStructure);
     }
 
     /**
@@ -75,10 +86,19 @@ export function photographerTemplate(photographerState) {
      * Génère la section média de la page photographe
      */
     function getMediaSectionDOM() {
-        return mediaData.map(media => {
+        return photographerState.mediaData.map(media => {
             const mediaCard = new MediaCard(media, photographerData.name);
             return mediaCard.render();
         });
+    }
+
+    function buildElement({ tag, class: className, attrs, text, children = [] }) {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (attrs) Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value));
+        if (text) element.textContent = text;
+        children.forEach(child => element.appendChild(buildElement(child)));
+        return element;
     }
 
     return { getUserCardDOM, getPhotographerHeaderDOM, getMediaSectionDOM };

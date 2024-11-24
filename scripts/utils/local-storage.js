@@ -7,47 +7,59 @@
  */
 
 export class LocalStorageManager {
-    /**
-     * Récupère le nombre de likes stocké pour un média
-     * @param {number} mediaId - L'ID du média
-     * @returns {number|null} Le nombre de likes ou null si non trouvé
-     */
-    static getLikes(mediaId) {
-        const likes = localStorage.getItem(`likes-${mediaId}`);
-        return likes ? parseInt(likes) : null;
+    constructor() {
+        this.storageStructure = {
+            prefix: 'media-',
+            defaultState: {
+                count: 0,
+                isLiked: false
+            }
+        };
     }
 
-    /**
-     * Récupère l'état "liké" d'un média
-     * @param {number} mediaId - L'ID du média
-     * @returns {boolean} true si le média est liké, false sinon
-     */
-    static getLikeState(mediaId) {
-        return localStorage.getItem(`liked-${mediaId}`) === 'true';
+    getMediaState(mediaId) {
+        const structure = {
+            key: `${this.storageStructure.prefix}${mediaId}`,
+            state: this.storageStructure.defaultState
+        };
+
+        const storedData = localStorage.getItem(structure.key);
+        return storedData ? JSON.parse(storedData) : structure.state;
     }
 
-    /**
-     * Sauvegarde le nombre de likes d'un média
-     * @param {number} mediaId - L'ID du média
-     * @param {number} likes - Le nombre de likes à sauvegarder
-     */
-    static saveLikes(mediaId, likes) {
-        localStorage.setItem(`likes-${mediaId}`, likes.toString());
+    saveMediaState(mediaId, state) {
+        const structure = {
+            key: `${this.storageStructure.prefix}${mediaId}`,
+            data: JSON.stringify(state)
+        };
+
+        localStorage.setItem(structure.key, structure.data);
     }
 
-    /**
-     * Sauvegarde l'état "liké" d'un média
-     * @param {number} mediaId - L'ID du média
-     * @param {boolean} isLiked - L'état à sauvegarder
-     */
-    static saveLikeState(mediaId, isLiked) {
-        localStorage.setItem(`liked-${mediaId}`, isLiked.toString());
+    getLikes(mediaId) {
+        return this.getMediaState(mediaId).count || null;
     }
 
-    static getTotalLikes(mediaList) {
+    getLikeState(mediaId) {
+        return this.getMediaState(mediaId).isLiked;
+    }
+
+    saveLikes(mediaId, likes) {
+        const state = this.getMediaState(mediaId);
+        state.count = likes;
+        this.saveMediaState(mediaId, state);
+    }
+
+    saveLikeState(mediaId, isLiked) {
+        const state = this.getMediaState(mediaId);
+        state.isLiked = isLiked;
+        this.saveMediaState(mediaId, state);
+    }
+
+    getTotalLikes(mediaList) {
         return mediaList.reduce((total, media) => {
-            const storedLikes = this.getLikes(media.id) || media.likes;
-            return total + storedLikes;
+            const state = this.getMediaState(media.id);
+            return total + (state.count || media.likes);
         }, 0);
     }
 }

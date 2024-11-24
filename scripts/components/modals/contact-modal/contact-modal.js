@@ -1,99 +1,114 @@
-import { ModalManager } from '../../../utils/modal-manager.js';
+import { ModalTemplate } from '../../../utils/modal-template.js';
 
-export class ContactModal {
+export class ContactModal extends ModalTemplate {
     constructor(photographerName) {
-        // 1. Création de la structure
-        const modalElement = document.createElement('div');
-        modalElement.className = 'contact_modal';
-        modalElement.setAttribute('role', 'dialog');
-        modalElement.setAttribute('aria-label', 'Contact Form');
-
-        modalElement.style.display = 'none';
-
-        // 2. Création du contenu
-        const content = this.createContent(photographerName);
-        modalElement.appendChild(content);
-
-        // 3. Stockage de l'élément
-        this.element = modalElement;
-
-        // 4. Ajout au DOM
-        document.body.appendChild(modalElement);
+        const contactContainer = document.querySelector('#contact_modal');
+        super('Contact', 'contact-modal', contactContainer);
+        this.buildContactForm(photographerName);
     }
 
-    createContent(photographerName) {
-        const content = document.createElement('div');
-        content.className = 'modal-content modal';
+    buildContactForm(photographerName) {
+        const formStructure = {
+            tag: 'form',
+            class: 'modal-content',
+            children: [
+                {
+                    tag: 'header',
+                    children: [{
+                        tag: 'div',
+                        class: 'title-container',
+                        children: [
+                            {
+                                tag: 'h2',
+                                text: 'Contactez-moi'
+                            },
+                            {
+                                tag: 'span',
+                                class: 'photographer-name',
+                                text: photographerName
+                            }
+                        ]
+                    }]
+                },
+                {
+                    tag: 'div',
+                    class: 'form-fields',
+                    children: [
+                        { id: 'firstname', label: 'Prénom', type: 'text' },
+                        { id: 'lastname', label: 'Nom', type: 'text' },
+                        { id: 'email', label: 'Email', type: 'email' },
+                        { id: 'message', label: 'Votre message', type: 'textarea' }
+                    ].map(field => ({
+                        tag: 'div',
+                        class: 'formData',
+                        children: [
+                            {
+                                tag: 'label',
+                                attrs: { for: field.id },
+                                text: field.label
+                            },
+                            {
+                                tag: field.type === 'textarea' ? 'textarea' : 'input',
+                                attrs: {
+                                    id: field.id,
+                                    name: field.id,
+                                    type: field.type !== 'textarea' ? field.type : undefined
+                                }
+                            }
+                        ]
+                    }))
+                },
+                {
+                    tag: 'button',
+                    class: 'contact-button',
+                    text: 'Envoyer',
+                    attrs: { type: 'submit' }
+                }
+            ]
+        };
 
-        content.append(
-            this.createHeader(photographerName),
-            this.createForm()
-        );
-
-        return content;
-    }
-
-    createHeader(photographerName) {
-        const header = document.createElement('header');
-
-        // Wrapper pour le titre et le nom ✨
-        const titleContainer = document.createElement('div');
-        titleContainer.className = 'title-container';
-
-        // Titre
-        const title = document.createElement('h2');
-        title.textContent = 'Contactez-moi';
-
-        // Nom du photographe
-        const photographerSpan = document.createElement('span');
-        photographerSpan.className = 'photographer-name';
-        photographerSpan.textContent = photographerName;
-
-        // Ajout du titre et du nom dans le container
-        titleContainer.append(title, photographerSpan);
-
-        header.append(titleContainer);
-        return header;
-    }
-
-    createForm() {
-        const form = document.createElement('form');
-
-        const fields = [
-            { id: 'firstname', label: 'Prénom', type: 'text' },
-            { id: 'lastname', label: 'Nom', type: 'text' },
-            { id: 'email', label: 'Email', type: 'email' },
-            { id: 'message', label: 'Votre message', type: 'textarea' }
-        ];
-
-        fields.forEach(field => {
-            const div = document.createElement('div');
-            div.className = 'formData';
-
-            const label = document.createElement('label');
-            label.setAttribute('for', field.id);
-            label.textContent = field.label;
-
-            const input = document.createElement(field.type === 'textarea' ? 'textarea' : 'input');
-            input.id = field.id;
-            input.name = field.id;
-            if (field.type !== 'textarea') input.type = field.type;
-
-            div.append(label, input);
-            form.appendChild(div);
-        });
-
-        const submitBtn = document.createElement('button');
-        submitBtn.className = 'contact_button';
-        submitBtn.textContent = 'Envoyer';
-        form.appendChild(submitBtn);
+        const form = this.buildElement(formStructure);
+        const closeButton = this.createCloseButton();
+        form.appendChild(closeButton);
 
         form.onsubmit = (e) => {
             e.preventDefault();
-            console.log('Form submitted');
-            ModalManager.close(this);
+            if (this.validateForm(form)) {
+                this.handleSubmit(form);
+                this.close();
+            }
         };
 
-        return form;
+        this.setContent(form);
+    }
+
+    validateForm(form) {
+        const fields = form.querySelectorAll('input, textarea');
+        let isValid = true;
+
+        fields.forEach(field => {
+            field.parentElement.removeAttribute('data-error-visible');
+            
+            if (!field.value.trim()) {
+                field.parentElement.setAttribute('data-error-visible', 'true');
+                isValid = false;
+            }
+            
+            if (field.type === 'email' && !this.isValidEmail(field.value)) {
+                field.parentElement.setAttribute('data-error-visible', 'true');
+                isValid = false;
+            }
+        });
+
+        return isValid;
+    }
+
+    isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    handleSubmit(form) {
+        const formData = new FormData(form);
+        console.log('Form data:', Object.fromEntries(formData.entries()));
     }
 }

@@ -1,4 +1,4 @@
-.contact_modal {
+.contact-modal {
     display: none;
     position: fixed;
     top: 0;
@@ -11,7 +11,7 @@
     align-items: center;
 }
 
-.modal-content {
+.contact-modal .modal-content {
     position: relative;
     width: 669px;
     height: 900px;
@@ -24,31 +24,31 @@
     box-shadow: -5px 30px 10px rgba(0, 0, 0, 0.2);
 }
 
-.modal header {
+.contact-modal header {
     position: relative;
     width: 100%;
     padding-bottom: 2rem;
 }
 
-.modal .title-container {
+.contact-modal .title-container {
     display: flex;
     flex-direction: column;
 }
 
-.modal header h2 {
+.contact-modal header h2 {
     font-size: 64px;
     font-weight: normal;
     margin: 0;
     color: #000;
 }
 
-.modal header .photographer-name {
+.contact-modal header .photographer-name {
     font-size: 64px;
     font-weight: normal;
     color: #000;
 }
 
-.contact_modal .modal-close {
+.contact-modal .modal-close {
     position: absolute;
     top: 35px;
     right: 35px;
@@ -60,42 +60,52 @@
     z-index: 1;
 }
 
-.contact_modal .modal-close img {
+.contact-modal .modal-close img {
     width: 100%;
     height: 100%;
 }
 
-.modal .contact_button {
+.contact-modal .contact-button {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    padding: 11px;
+    width: 170px;
     height: 69px;
+    border: none;
+    background-color: #901C1C;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: flex-start;
 }
 
-.modal form {
+.contact-modal form {
     display: flex;
     width: 100%;
     flex-direction: column;
     align-items: flex-start;
 }
 
-.modal form label {
+.contact-modal form label {
     color: #312E2E;
     font-size: 36px;
 }
 
-.modal form div {
+.contact-modal form div {
     display: flex;
     flex-direction: column;
     width: 100%;
     align-items: self-start;
 }
 
-.modal form input {
+.contact-modal form input {
     width: 100%;
     height: 68px;
     border: none;
     border-radius: 5px;
 }
 
-.modal form textarea {
+.contact-modal form textarea {
     width: 100%;
     height: 170px;
     border-radius: 5px;
