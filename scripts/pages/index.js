@@ -1,3 +1,4 @@
+import { buildElement } from '../utils/dom-utils.js';
 import { photographerTemplate } from '../templates/photographer.js';
 
 class IndexPage {
@@ -50,16 +51,7 @@ class IndexPage {
             ]
         };
 
-        return this.buildElement(pageStructure);
-    }
-
-    buildElement({ tag, class: className, attrs, text, children = [] }) {
-        const element = document.createElement(tag);
-        if (className) element.className = className;
-        if (attrs) Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value));
-        if (text) element.textContent = text;
-        children.forEach(child => element.appendChild(this.buildElement(child)));
-        return element;
+        return buildElement(pageStructure);
     }
 }
 

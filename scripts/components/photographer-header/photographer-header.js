@@ -1,3 +1,4 @@
+import { buildElement } from '../../utils/dom-utils.js';
 import { ContactModal } from '../modals/contact-modal/contact-modal.js';
 
 export class PhotographerHeader {
@@ -54,7 +55,7 @@ export class PhotographerHeader {
             ]
         };
 
-        const header = this.buildElement(headerStructure);
+        const header = buildElement(headerStructure);
         
         // Event sur le bouton contact
         const contactButton = header.querySelector('.contact_button');
@@ -64,15 +65,5 @@ export class PhotographerHeader {
         };
 
         return header;
-    }
-
-    buildElement({ tag, class: className, style, attrs, text, children = [] }) {
-        const element = document.createElement(tag);
-        if (className) element.className = className;
-        if (style) Object.assign(element.style, style);
-        if (attrs) Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value));
-        if (text) element.textContent = text;
-        children.forEach(child => element.appendChild(this.buildElement(child)));
-        return element;
     }
 }

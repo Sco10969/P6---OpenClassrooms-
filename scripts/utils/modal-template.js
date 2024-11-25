@@ -7,7 +7,7 @@ export class ModalTemplate {
     }
 
     buildModal(modalType) {
-        // Structure de base comme dans Liquid
+        // Crée la structure de la modale
         const modalStructure = {
             tag: 'div',
             class: `modal ${modalType}`,
@@ -31,17 +31,19 @@ export class ModalTemplate {
         this.modal = this.buildElement(modalStructure);
         this.container.appendChild(this.modal);
 
-        // Fermeture au clic en dehors
+        // Ferme la modale en cliquant à l'extérieur
         this.modal.onclick = e => {
             if (e.target === this.modal) this.close();
         };
-        
+
+        // Ferme la modale avec la touche Échap
         document.addEventListener('keydown', e => {
             if (e.key === 'Escape') this.close();
         });
     }
 
     buildElement({ tag, class: className, style, attrs, text, children = [] }) {
+        // Crée un élément DOM à partir de la configuration
         const element = document.createElement(tag);
         if (className) element.className = className;
         if (style) Object.assign(element.style, style);
@@ -52,31 +54,30 @@ export class ModalTemplate {
     }
 
     createCloseButton() {
+        // Crée un bouton de fermeture pour la modale
         const closeButton = this.buildElement({
             tag: 'button',
             class: 'modal-close',
             attrs: { 'aria-label': 'Fermer' },
             children: [{
                 tag: 'img',
-                attrs: { src: 'assets/icons/close.svg', alt: '' }
+                attrs: { src: 'assets/icons/close.svg', alt: 'Fermer la modale' }
             }]
         });
-        
+
         closeButton.onclick = () => this.close();
         return closeButton;
     }
 
     setContent(content) {
+        // Remplace le contenu de la modale
         const contentWrapper = this.modal.querySelector('.modal-wrapper-content');
         contentWrapper.innerHTML = '';
         contentWrapper.appendChild(content);
     }
 
     open() {
-        document.querySelectorAll('.modal').forEach(modal => {
-            if (modal !== this.modal) modal.remove();
-        });
-
+        // Ouvre la modale
         this.isOpen = true;
         this.modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
@@ -84,9 +85,14 @@ export class ModalTemplate {
     }
 
     close() {
+        // Ferme la modale et la supprime du DOM
         this.isOpen = false;
         this.modal.style.display = 'none';
         document.body.style.overflow = 'auto';
         document.querySelector('main').removeAttribute('inert');
+
+        if (this.modal.parentNode) {
+            this.modal.parentNode.removeChild(this.modal);
+        }
     }
 }

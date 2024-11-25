@@ -1,3 +1,4 @@
+import { buildElement } from '../../utils/dom-utils.js';
 import { LocalStorageManager } from '../../utils/local-storage.js';
 
 export class TotalLikes {
@@ -49,17 +50,8 @@ export class TotalLikes {
             ]
         };
 
-        this.element = this.buildElement(overlayStructure);
+        this.element = buildElement(overlayStructure);
         return this.element;
-    }
-
-    buildElement({ tag, class: className, attrs, text, children = [] }) {
-        const element = document.createElement(tag);
-        if (className) element.className = className;
-        if (attrs) Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value));
-        if (text) element.textContent = text;
-        children.forEach(child => element.appendChild(this.buildElement(child)));
-        return element;
     }
 
     calculateTotalLikes() {

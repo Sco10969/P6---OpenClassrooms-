@@ -1,3 +1,4 @@
+import { buildElement } from '../../utils/dom-utils.js';
 import { LikeButton } from '../like-button/like-button.js';
 import { LightboxModal } from '../modals/lightbox-modal/lightbox-modal.js';
 
@@ -42,7 +43,7 @@ export class MediaCard {
             ]
         };
 
-        const card = this.buildElement(cardStructure);
+        const card = buildElement(cardStructure);
         
         // Event pour la lightbox
         card.querySelector('.media-wrapper').onclick = () => {
@@ -101,15 +102,5 @@ export class MediaCard {
     getCurrentIndex() {
         const mediaCards = Array.from(document.querySelectorAll('.media-card'));
         return mediaCards.findIndex(card => card.dataset.mediaId === this.media.id.toString());
-    }
-
-    buildElement({ tag, class: className, attrs, text, children = [], setup }) {
-        const element = document.createElement(tag);
-        if (className) element.className = className;
-        if (attrs) Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value));
-        if (text) element.textContent = text;
-        if (children) children.forEach(child => element.appendChild(this.buildElement(child)));
-        if (setup) setup(element);
-        return element;
     }
 }

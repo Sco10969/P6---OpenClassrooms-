@@ -1,3 +1,4 @@
+import { buildElement } from '../../utils/dom-utils.js';
 import { LocalStorageManager } from '../../utils/local-storage.js';
 
 export class LikeButton {
@@ -39,7 +40,7 @@ export class LikeButton {
             ]
         };
 
-        const element = this.buildElement(buttonStructure);
+        const element = buildElement(buttonStructure);
         
         // Event listener pour le like
         const button = element.querySelector('.like-button');
@@ -50,15 +51,6 @@ export class LikeButton {
             button.querySelector('img').classList.toggle('liked');
         };
 
-        return element;
-    }
-
-    buildElement({ tag, class: className, attrs, text, children = [] }) {
-        const element = document.createElement(tag);
-        if (className) element.className = className;
-        if (attrs) Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value));
-        if (text) element.textContent = text;
-        children.forEach(child => element.appendChild(this.buildElement(child)));
         return element;
     }
 

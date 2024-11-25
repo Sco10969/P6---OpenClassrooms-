@@ -1,3 +1,4 @@
+import { buildElement } from '../utils/dom-utils.js';
 import { PhotographerHeader } from '../components/photographer-header/photographer-header.js';
 import { MediaCard } from '../components/media-card/media-card.js';
 
@@ -90,15 +91,6 @@ export function photographerTemplate(photographerState) {
             const mediaCard = new MediaCard(media, photographerData.name);
             return mediaCard.render();
         });
-    }
-
-    function buildElement({ tag, class: className, attrs, text, children = [] }) {
-        const element = document.createElement(tag);
-        if (className) element.className = className;
-        if (attrs) Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value));
-        if (text) element.textContent = text;
-        children.forEach(child => element.appendChild(buildElement(child)));
-        return element;
     }
 
     return { getUserCardDOM, getPhotographerHeaderDOM, getMediaSectionDOM };
