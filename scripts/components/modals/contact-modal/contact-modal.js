@@ -1,3 +1,4 @@
+import { buildElement } from '../../../utils/dom-utils.js';
 import { ModalTemplate } from '../../../utils/modal-template.js';
 
 export class ContactModal extends ModalTemplate {
@@ -67,7 +68,7 @@ export class ContactModal extends ModalTemplate {
             ]
         };
 
-        const form = this.buildElement(formStructure);
+        const form = buildElement(formStructure);
         const closeButton = this.createCloseButton();
         form.appendChild(closeButton);
 

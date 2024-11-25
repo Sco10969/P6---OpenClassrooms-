@@ -1,3 +1,4 @@
+import { buildElement } from '../../../utils/dom-utils.js';
 import { ModalTemplate } from '../../../utils/modal-template.js';
 
 export class LightboxModal extends ModalTemplate {
@@ -59,7 +60,7 @@ export class LightboxModal extends ModalTemplate {
             ]
         };
 
-        const content = this.buildElement(lightboxStructure);
+        const content = buildElement(lightboxStructure);
         const closeButton = this.createCloseButton();
         content.appendChild(closeButton);
 

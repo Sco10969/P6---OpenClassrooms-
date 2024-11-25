@@ -1,3 +1,5 @@
+import { buildElement } from '../utils/dom-utils.js';
+
 export class ModalTemplate {
     constructor(title, modalType = '', container = null) {
         this.title = title;
@@ -28,34 +30,23 @@ export class ModalTemplate {
             }]
         };
 
-        this.modal = this.buildElement(modalStructure);
+        this.modal = buildElement(modalStructure);
         this.container.appendChild(this.modal);
 
         // Ferme la modale en cliquant à l'extérieur
         this.modal.onclick = e => {
             if (e.target === this.modal) this.close();
         };
-
+        
         // Ferme la modale avec la touche Échap
         document.addEventListener('keydown', e => {
             if (e.key === 'Escape') this.close();
         });
     }
 
-    buildElement({ tag, class: className, style, attrs, text, children = [] }) {
-        // Crée un élément DOM à partir de la configuration
-        const element = document.createElement(tag);
-        if (className) element.className = className;
-        if (style) Object.assign(element.style, style);
-        if (attrs) Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value));
-        if (text) element.textContent = text;
-        children.forEach(child => element.appendChild(this.buildElement(child)));
-        return element;
-    }
-
     createCloseButton() {
         // Crée un bouton de fermeture pour la modale
-        const closeButton = this.buildElement({
+        const closeButton = buildElement({
             tag: 'button',
             class: 'modal-close',
             attrs: { 'aria-label': 'Fermer' },
