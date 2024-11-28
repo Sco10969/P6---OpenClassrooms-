@@ -1,5 +1,5 @@
 // utils/dom-utils.js
-export function buildElement({ tag, class: className, style, attrs, text, children = [], setup }) {
+export function buildElement({ tag, className, style, attrs, text, children = [], setup }) {
     const element = document.createElement(tag);
     if (className) element.className = className;
     if (style) Object.assign(element.style, style);

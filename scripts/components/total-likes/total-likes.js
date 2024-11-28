@@ -21,12 +21,12 @@ export class TotalLikes {
     render() {
         const overlayStructure = {
             tag: 'div',
-            class: 'total-likes-overlay',
+            className: 'total-likes-overlay',
             children: [
                 // Compteur de likes
                 {
                     tag: 'div',
-                    class: 'likes-count',
+                    className: 'likes-count',
                     children: [
                         {
                             tag: 'span',
@@ -44,7 +44,7 @@ export class TotalLikes {
                 // Prix
                 {
                     tag: 'div',
-                    class: 'price',
+                    className: 'price',
                     text: `${this.photographerPrice}€ / jour`
                 }
             ]

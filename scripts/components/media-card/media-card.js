@@ -3,36 +3,37 @@ import { LikeButton } from '../like-button/like-button.js';
 import { LightboxModal } from '../modals/lightbox-modal/lightbox-modal.js';
 
 export class MediaCard {
-    constructor(media, photographerName) {
+    constructor(media, photographerName, lightbox) {
         this.media = media;
         this.photographerName = photographerName;
+        this.lightbox = lightbox;
     }
 
     render() {
         const cardStructure = {
             tag: 'article',
-            class: 'media-card',
+            className: 'media-card',
             attrs: { 'data-media-id': this.media.id },
             children: [
                 // Media Wrapper
                 {
                     tag: 'div',
-                    class: 'media-wrapper',
+                    className: 'media-wrapper',
                     children: [this.getMediaStructure()]
                 },
                 // Info Section
                 {
                     tag: 'div',
-                    class: 'media-info',
+                    className: 'media-info',
                     children: [
                         {
                             tag: 'span',
-                            class: 'media-title',
+                            className: 'media-title',
                             text: this.media.title
                         },
                         {
                             tag: 'div',
-                            class: 'likes-container',
+                            className: 'likes-container',
                             setup: element => {
                                 const likeButton = new LikeButton(this.media.id, this.media.likes);
                                 element.appendChild(likeButton.render());
@@ -47,11 +48,7 @@ export class MediaCard {
         
         // Event pour la lightbox
         card.querySelector('.media-wrapper').onclick = () => {
-            const lightbox = new LightboxModal({
-                mediaList: this.getAllMedias(),
-                currentIndex: this.getCurrentIndex()
-            });
-            lightbox.open();
+            this.lightbox.open(this.media, this.getCurrentIndex());
         };
 
         return card;

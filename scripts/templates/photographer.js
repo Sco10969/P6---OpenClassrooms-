@@ -15,12 +15,12 @@ export function photographerTemplate(photographerState) {
     function getUserCardDOM() {
         const cardStructure = {
             tag: 'figure',
-            class: 'card-index',
+            className: 'card-index',
             children: [
                 // Lien principal
                 {
                     tag: 'a',
-                    class: 'link',
+                    className: 'link',
                     attrs: {
                         href: `./photographer.html?id=${photographerData.id}`,
                         'aria-label': `Voir le profil de ${photographerData.name}`
@@ -29,10 +29,10 @@ export function photographerTemplate(photographerState) {
                         // Container image
                         {
                             tag: 'div',
-                            class: 'img-container',
+                            className: 'img-container',
                             children: [{
                                 tag: 'img',
-                                class: 'portrait',
+                                className: 'portrait',
                                 attrs: {
                                     src: `assets/photographers/${photographerData.portrait}`,
                                     alt: `Portrait de ${photographerData.name}`
@@ -42,7 +42,7 @@ export function photographerTemplate(photographerState) {
                         // Nom
                         {
                             tag: 'h2',
-                            class: 'name',
+                            className: 'name',
                             text: photographerData.name
                         }
                     ]
@@ -50,21 +50,21 @@ export function photographerTemplate(photographerState) {
                 // Description
                 {
                     tag: 'div',
-                    class: 'description',
+                    className: 'description',
                     children: [
                         {
                             tag: 'span',
-                            class: 'location',
+                            className: 'location',
                             text: `${photographerData.city}, ${photographerData.country}`
                         },
                         {
                             tag: 'p',
-                            class: 'tagline',
+                            className: 'tagline',
                             text: photographerData.tagline
                         },
                         {
                             tag: 'data',
-                            class: 'price',
+                            className: 'price',
                             text: `${photographerData.price}€/jour`
                         }
                     ]

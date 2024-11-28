@@ -21,14 +21,14 @@ class IndexPage {
     render() {
         const pageStructure = {
             tag: 'div',
-            class: 'container',
+            className: 'container',
             children: [
                 {
                     tag: 'header',
                     children: [
                         {
                             tag: 'img',
-                            class: 'logo',
+                            className: 'logo',
                             attrs: {
                                 src: 'assets/images/logo.png',
                                 alt: 'Fisheye Home page'
@@ -45,7 +45,7 @@ class IndexPage {
                     attrs: { id: 'main' },
                     children: [{
                         tag: 'div',
-                        class: 'photographer_section'
+                        className: 'photographer_section'
                     }]
                 }
             ]

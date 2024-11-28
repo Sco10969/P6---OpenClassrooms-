@@ -2,27 +2,27 @@ import { buildElement } from '../../../utils/dom-utils.js';
 import { ModalTemplate } from '../../../utils/modal-template.js';
 
 export class LightboxModal extends ModalTemplate {
-    constructor(photographerMedia) {
+    constructor() {
         super('Galerie', 'lightbox-modal');
-        this.mediaList = photographerMedia.mediaList;
-        this.currentIndex = photographerMedia.currentIndex || 0;
+        this.mediaList = [];
+        this.currentIndex = 0;
         this.buildLightbox();
     }
 
     buildLightbox() {
         const lightboxStructure = {
             tag: 'div',
-            class: 'modal-content lightbox-content',
+            className: 'modal-content lightbox-content',
             children: [
                 // Wrapper pour le contenu
                 {
                     tag: 'div',
-                    class: 'lightbox-wrapper',
+                    className: 'lightbox-wrapper',
                     children: [
                         // Bouton précédent
                         {
                             tag: 'button',
-                            class: 'lightbox-prev',
+                            className: 'lightbox-prev',
                             attrs: { 'aria-label': 'Image précédente' },
                             children: [{
                                 tag: 'img',
@@ -35,12 +35,12 @@ export class LightboxModal extends ModalTemplate {
                         // Container média
                         {
                             tag: 'div',
-                            class: 'lightbox-media'
+                            className: 'lightbox-media'
                         },
                         // Bouton suivant
                         {
                             tag: 'button',
-                            class: 'lightbox-next',
+                            className: 'lightbox-next',
                             attrs: { 'aria-label': 'Image suivante' },
                             children: [{
                                 tag: 'img',
@@ -53,7 +53,7 @@ export class LightboxModal extends ModalTemplate {
                         // Titre
                         {
                             tag: 'h2',
-                            class: 'lightbox-title'
+                            className: 'lightbox-title'
                         }
                     ]
                 }
@@ -78,8 +78,13 @@ export class LightboxModal extends ModalTemplate {
             if (e.key === 'ArrowRight') this.next();
         });
 
+    }
+
+    open(content, index) {
+        super.open(content);
         this.setContent(content);
-        this.showMedia(this.currentIndex);
+        this.currentIndex = index;
+        this.showMedia(index);
     }
 
     showMedia(index) {

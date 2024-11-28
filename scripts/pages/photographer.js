@@ -1,6 +1,7 @@
 import { MediaCard } from '../components/media-card/media-card.js';
 import { PhotographerHeader } from '../components/photographer-header/photographer-header.js';
 import { TotalLikes } from '../components/total-likes/total-likes.js';
+import { LightboxModal } from '../components/modals/lightbox-modal/lightbox-modal.js';
 
 class PhotographerPage {
     constructor() {
@@ -40,9 +41,11 @@ class PhotographerPage {
             photographerName: photographerData.name
         }));
 
+        const lightbox = new LightboxModal();
+
         const mediaSection = document.querySelector('.media_section');
         mediaWithPhotographer.forEach(media => {
-            const mediaCard = new MediaCard(media, photographerData.name);
+            const mediaCard = new MediaCard(media, photographerData.name, lightbox);
             mediaSection.appendChild(mediaCard.render());
         });
 

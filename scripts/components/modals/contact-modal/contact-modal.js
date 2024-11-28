@@ -11,13 +11,13 @@ export class ContactModal extends ModalTemplate {
     buildContactForm(photographerName) {
         const formStructure = {
             tag: 'form',
-            class: 'modal-content',
+            className: 'modal-content',
             children: [
                 {
                     tag: 'header',
                     children: [{
                         tag: 'div',
-                        class: 'title-container',
+                        className: 'title-container',
                         children: [
                             {
                                 tag: 'h2',
@@ -25,7 +25,7 @@ export class ContactModal extends ModalTemplate {
                             },
                             {
                                 tag: 'span',
-                                class: 'photographer-name',
+                                className: 'photographer-name',
                                 text: photographerName
                             }
                         ]
@@ -33,7 +33,7 @@ export class ContactModal extends ModalTemplate {
                 },
                 {
                     tag: 'div',
-                    class: 'form-fields',
+                    className: 'form-fields',
                     children: [
                         { id: 'firstname', label: 'Prénom', type: 'text' },
                         { id: 'lastname', label: 'Nom', type: 'text' },
@@ -41,7 +41,7 @@ export class ContactModal extends ModalTemplate {
                         { id: 'message', label: 'Votre message', type: 'textarea' }
                     ].map(field => ({
                         tag: 'div',
-                        class: 'formData',
+                        className: 'formData',
                         children: [
                             {
                                 tag: 'label',
@@ -61,7 +61,7 @@ export class ContactModal extends ModalTemplate {
                 },
                 {
                     tag: 'button',
-                    class: 'contact-button',
+                    className: 'contact-button',
                     text: 'Envoyer',
                     attrs: { type: 'submit' }
                 }

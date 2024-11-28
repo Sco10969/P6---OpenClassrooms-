@@ -6,31 +6,32 @@ export class PhotographerHeader {
 
     constructor(photographer) {
         this.#photographer = photographer;
+        this.contactModal = new ContactModal(this.#photographer.name);
     }
 
     render() {
         const headerStructure = {
             tag: 'article',
-            class: 'photographer_header',
+            className: 'photographer_header',
             children: [
                 // Info Section
                 {
                     tag: 'div',
-                    class: 'photographer_info',
+                    className: 'photographer_info',
                     children: [
                         {
                             tag: 'h1',
-                            class: 'name',
+                            className: 'name',
                             text: this.#photographer.name
                         },
                         {
                             tag: 'p',
-                            class: 'location',
+                            className: 'location',
                             text: `${this.#photographer.city}, ${this.#photographer.country}`
                         },
                         {
                             tag: 'p',
-                            class: 'tagline',
+                            className: 'tagline',
                             text: this.#photographer.tagline
                         }
                     ]
@@ -38,7 +39,7 @@ export class PhotographerHeader {
                 // Contact Button
                 {
                     tag: 'button',
-                    class: 'contact_button',
+                    className: 'contact_button',
                     text: 'Contactez-moi',
                     attrs: {
                         'aria-label': 'Contacter le photographe'
@@ -60,8 +61,7 @@ export class PhotographerHeader {
         // Event sur le bouton contact
         const contactButton = header.querySelector('.contact_button');
         contactButton.onclick = () => {
-            const contactModal = new ContactModal(this.#photographer.name);
-            contactModal.open();
+            this.contactModal.open();
         };
 
         return header;

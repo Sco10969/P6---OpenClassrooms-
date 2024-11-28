@@ -6,24 +6,25 @@ export class ModalTemplate {
         this.isOpen = false;
         this.container = container || document.body;
         this.buildModal(modalType);
+        console.log(title);
     }
 
     buildModal(modalType) {
         // Crée la structure de la modale
         const modalStructure = {
             tag: 'div',
-            class: `modal ${modalType}`,
+            className: `modal ${modalType}`,
             attrs: { role: 'dialog' },
             style: { display: 'none' },
             children: [{
                 tag: 'div',
-                class: 'modal-wrapper',
+                className: 'modal-wrapper',
                 children: [{
                     tag: 'div',
-                    class: 'modal-wrapper-content',
+                    className: 'modal-wrapper-content',
                     children: this.title ? [{
                         tag: 'h2',
-                        class: 'modal-title',
+                        className: 'modal-title',
                         text: this.title
                     }] : []
                 }]
@@ -31,7 +32,7 @@ export class ModalTemplate {
         };
 
         this.modal = buildElement(modalStructure);
-        this.container.appendChild(this.modal);
+        this.container?.appendChild(this.modal);
 
         // Ferme la modale en cliquant à l'extérieur
         this.modal.onclick = e => {
@@ -40,6 +41,10 @@ export class ModalTemplate {
         
         // Ferme la modale avec la touche Échap
         document.addEventListener('keydown', e => {
+            if (this.modal.querySelector('.modal-wrapper-content').contains(e.target)) {
+                e.stopPropagation();
+                return;
+            }
             if (e.key === 'Escape') this.close();
         });
     }
@@ -48,7 +53,7 @@ export class ModalTemplate {
         // Crée un bouton de fermeture pour la modale
         const closeButton = buildElement({
             tag: 'button',
-            class: 'modal-close',
+            className: 'modal-close',
             attrs: { 'aria-label': 'Fermer' },
             children: [{
                 tag: 'img',
@@ -68,6 +73,7 @@ export class ModalTemplate {
     }
 
     open() {
+        if (this.isOpen) return;
         // Ouvre la modale
         this.isOpen = true;
         this.modal.style.display = 'flex';
@@ -76,14 +82,12 @@ export class ModalTemplate {
     }
 
     close() {
-        // Ferme la modale et la supprime du DOM
+        if (!this.isOpen) return;
+        console.log('close');
+        // Ferme la modale
         this.isOpen = false;
         this.modal.style.display = 'none';
         document.body.style.overflow = 'auto';
         document.querySelector('main').removeAttribute('inert');
-
-        if (this.modal.parentNode) {
-            this.modal.parentNode.removeChild(this.modal);
-        }
     }
 }

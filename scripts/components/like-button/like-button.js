@@ -18,19 +18,19 @@ export class LikeButton {
     render() {
         const buttonStructure = {
             tag: 'div',
-            class: 'likes-container',
+            className: 'likes-container',
             children: [
                 {
                     tag: 'span',
-                    class: 'likes-count',
+                    className: 'likes-count',
                     text: this.likes
                 },
                 {
                     tag: 'button',
-                    class: `like-button ${this.isLiked ? 'liked' : ''}`,
+                    className: `like-button ${this.isLiked ? 'liked' : ''}`,
                     children: [{
                         tag: 'img',
-                        class: this.isLiked ? 'liked' : '',
+                        className: this.isLiked ? 'liked' : '',
                         attrs: {
                             src: 'assets/icons/favorite-24px 1.svg',
                             alt: 'like icon'
