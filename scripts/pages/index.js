@@ -25,27 +25,51 @@ class IndexPage {
             children: [
                 {
                     tag: 'header',
+                    attrs: { role: 'banner' },
                     children: [
                         {
-                            tag: 'img',
-                            className: 'logo',
+                            tag: 'a',
+                            className: 'home-link',
                             attrs: {
-                                src: 'assets/images/logo.png',
-                                alt: 'Fisheye Home page'
-                            }
+                                href: 'index.html',
+                                'aria-label': 'Fisheye Accueil',
+                                role: 'link'
+                            },
+                            children: [{
+                                tag: 'img',
+                                className: 'logo',
+                                attrs: {
+                                    src: 'assets/images/logo.png',
+                                    alt: 'Fisheye Home page',
+                                    role: 'img'
+                                }
+                            }]
                         },
                         {
                             tag: 'h1',
-                            text: 'Nos photographes'
+                            text: 'Nos photographes',
+                            attrs: {
+                                tabindex: '0',
+                                role: 'heading',
+                                'aria-level': '1'
+                            }
                         }
                     ]
                 },
                 {
                     tag: 'main',
-                    attrs: { id: 'main' },
+                    attrs: { 
+                        id: 'main',
+                        role: 'main',
+                        'aria-label': 'Liste des photographes'
+                    },
                     children: [{
                         tag: 'div',
-                        className: 'photographer_section'
+                        className: 'photographer_section',
+                        attrs: {
+                            role: 'region',
+                            'aria-label': 'Galerie des photographes'
+                        }
                     }]
                 }
             ]
