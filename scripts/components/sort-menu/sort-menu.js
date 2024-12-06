@@ -16,19 +16,31 @@ export class SortMenu {
         const menuStructure = {
             tag: 'div',
             className: 'sort-menu',
+            attrs: { 
+                role: 'region',
+                'aria-label': 'Options de tri'
+            },
             children: [
                 {
                     tag: 'span',
                     className: 'sort-label',
-                    text: 'Trier par'
+                    text: 'Trier par',
+                    attrs: { id: 'sort-label' }
                 },
                 {
                     tag: 'div',
                     className: 'dropdown',
+                    attrs: { role: 'listbox' },
                     children: [
                         {
                             tag: 'button',
                             className: 'dropdown-toggle',
+                            attrs: {
+                                'aria-haspopup': 'listbox',
+                                'aria-expanded': 'false',
+                                'aria-labelledby': 'sort-label',
+                                'aria-controls': 'sort-options'
+                            },
                             children: [
                                 {
                                     tag: 'span',
@@ -36,19 +48,34 @@ export class SortMenu {
                                 },
                                 {
                                     tag: 'i',
-                                    className: 'fa-solid fa-chevron-down sort-direction'
+                                    className: 'fa-solid fa-chevron-down sort-direction',
+                                    attrs: {
+                                        'aria-hidden': 'true'
+                                    }
                                 }
                             ]
                         },
                         {
                             tag: 'div',
                             className: 'dropdown-menu',
+                            attrs: {
+                                id: 'sort-options',
+                                role: 'listbox',
+                                'aria-label': 'Options de tri disponibles'
+                            },
                             children: this.options.reduce((acc, option, index) => {
-                                if (index > 0) acc.push({ tag: 'hr' });
+                                if (index > 0) acc.push({ 
+                                    tag: 'hr',
+                                    attrs: { role: 'separator' }
+                                });
                                 acc.push({
                                     tag: 'button',
                                     className: this.currentOption.id === option.id ? 'active' : '',
-                                    attrs: { 'data-sort': option.id },
+                                    attrs: {
+                                        role: 'option',
+                                        'aria-selected': this.currentOption.id === option.id,
+                                        'data-sort': option.id
+                                    },
                                     text: option.label
                                 });
                                 return acc;
@@ -65,8 +92,10 @@ export class SortMenu {
 
         // Toggle du menu
         toggle.onclick = () => {
+            const isExpanded = dropdownMenu.classList.contains('show');
             dropdownMenu.classList.toggle('show');
             toggle.classList.toggle('open');
+            toggle.setAttribute('aria-expanded', !isExpanded);
         };
 
         // Sélection d'une option
@@ -81,13 +110,19 @@ export class SortMenu {
                     this.isAscending = true;
                 }
 
+                // Mise à jour UI et ARIA
                 toggle.querySelector('span').textContent = this.currentOption.label;
                 dropdownMenu.querySelectorAll('button').forEach(btn => {
-                    btn.classList.toggle('active', btn.dataset.sort === sortId);
+                    const isSelected = btn.dataset.sort === sortId;
+                    btn.classList.toggle('active', isSelected);
+                    btn.setAttribute('aria-selected', isSelected);
                 });
 
                 toggle.classList.remove('open');
                 dropdownMenu.classList.remove('show');
+                toggle.setAttribute('aria-expanded', 'false');
+                toggle.focus();
+                
                 this.onSortChange(sortId, this.isAscending);
             };
         });
@@ -97,6 +132,7 @@ export class SortMenu {
             if (!menu.contains(e.target)) {
                 dropdownMenu.classList.remove('show');
                 toggle.classList.remove('open');
+                toggle.setAttribute('aria-expanded', 'false');
             }
         });
 
