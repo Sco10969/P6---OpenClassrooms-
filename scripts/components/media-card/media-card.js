@@ -45,9 +45,10 @@ export class MediaCard {
         };
 
         const card = buildElement(cardStructure);
-        
+
         // Event pour la lightbox
         card.querySelector('.media-wrapper').onclick = () => {
+            this.lightbox.mediaList = this.getAllMedias();
             this.lightbox.open(this.media, this.getCurrentIndex());
         };
 
@@ -65,7 +66,7 @@ export class MediaCard {
                 }
             };
         }
-        
+
         return {
             tag: 'video',
             attrs: {

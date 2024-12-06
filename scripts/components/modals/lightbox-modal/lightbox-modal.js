@@ -71,18 +71,19 @@ export class LightboxModal extends ModalTemplate {
         // Events de navigation
         content.querySelector('.lightbox-prev').onclick = () => this.prev();
         content.querySelector('.lightbox-next').onclick = () => this.next();
-        
+
         // Navigation clavier
         document.addEventListener('keydown', e => {
             if (e.key === 'ArrowLeft') this.prev();
             if (e.key === 'ArrowRight') this.next();
         });
 
+        // IMPORTANT: ajout du contenu à la modale
+        this.setContent(content);
     }
 
-    open(content, index) {
-        super.open(content);
-        this.setContent(content);
+    open(media, index) {
+        super.open();
         this.currentIndex = index;
         this.showMedia(index);
     }
@@ -109,11 +110,11 @@ export class LightboxModal extends ModalTemplate {
             video.muted = true;
             video.controls = false;
             video.playsInline = true;
-            
+
             const source = document.createElement('source');
             source.src = `assets/medias/${media.photographerName}/${media.video}`;
             source.type = 'video/mp4';
-            
+
             video.appendChild(source);
             this.mediaContainer.appendChild(video);
         }
