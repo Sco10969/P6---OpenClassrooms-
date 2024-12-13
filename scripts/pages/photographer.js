@@ -7,8 +7,7 @@ import { SortMenu } from '../components/sort-menu/sort-menu.js';
 class PhotographerPage {
     constructor() {
         this.photographerId = new URLSearchParams(window.location.search).get('id');
-        this.currentSortOption = null;
-        this.isAscending = true;
+        this.mediaSetup = null;
         this.lightbox = new LightboxModal();
     }
 
@@ -35,12 +34,25 @@ class PhotographerPage {
     }
 
     displayPhotographer(photographerData, mediaData) {
+        // Sauvegarde de l'état initial
+        this.mediaSetup = [...mediaData];
+
         // Header
         const header = new PhotographerHeader(photographerData);
         document.querySelector('.photographer_header').appendChild(header.render());
 
         // Menu de tri
-        const sortMenu = new SortMenu((sortOption) => this.sortMedia(sortOption, mediaData, photographerData.name));
+        const sortMenu = new SortMenu((sortOption, direction) => {
+            if (direction === 'none') {
+                // Retour à l'état initial si pas de tri
+                this.renderMediaSection([...this.mediaSetup], photographerData.name);
+                return;
+            }
+
+            // Tri des données
+            const sortedData = sortMenu.sortData(mediaData, sortOption, direction);
+            this.renderMediaSection(sortedData, photographerData.name);
+        });
         document.querySelector('.media_section').before(sortMenu.render());
 
         // Media Section
@@ -59,30 +71,6 @@ class PhotographerPage {
             const mediaCard = new MediaCard(media, photographerName, this.lightbox);
             mediaSection.appendChild(mediaCard.render());
         });
-    }
-
-    sortMedia(sortOption, mediaData, photographerName) {
-        if (this.currentSortOption === sortOption) {
-            this.isAscending = !this.isAscending;
-        } else {
-            this.isAscending = true;
-        }
-        this.currentSortOption = sortOption;
-
-        console.log(`Sorting by: ${sortOption}, Ascending: ${this.isAscending}`);
-
-        switch (sortOption) {
-            case 'popularity':
-                mediaData.sort((a, b) => this.isAscending ? b.likes - a.likes : a.likes - b.likes);
-                break;
-            case 'date':
-                mediaData.sort((a, b) => this.isAscending ? new Date(b.date) - new Date(a.date) : new Date(a.date) - new Date(b.date));
-                break;
-            case 'title':
-                mediaData.sort((a, b) => this.isAscending ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title));
-                break;
-        }
-        this.renderMediaSection(mediaData, photographerName);
     }
 }
 

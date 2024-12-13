@@ -1,4 +1,5 @@
 import { buildElement } from '../../utils/dom-utils.js';
+import { DropdownMenu } from '../dropdown-menu/dropdown-menu.js';
 
 export class SortMenu {
     constructor(onSortChange) {
@@ -8,15 +9,47 @@ export class SortMenu {
             { id: 'title', label: 'Titre' }
         ];
         this.currentOption = this.options[0];
-        this.isAscending = true;
         this.onSortChange = onSortChange;
+
+        // Définition des fonctions de tri pour chaque option
+        this.sortFunctions = {
+            popularity: (a, b, isAscending) =>
+                // Tri par likes
+                isAscending ? a.likes - b.likes : b.likes - a.likes,
+           
+            date: (a, b, isAscending) => {
+                 // Tri par date
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                return isAscending ? dateA - dateB : dateB - dateA;
+            },
+
+            title: (a, b, isAscending) =>
+                // Tri alphabétique
+                isAscending ? 
+                    a.title.localeCompare(b.title) : 
+                    b.title.localeCompare(a.title)
+        };
+    }
+
+    sortData(data, option, direction) {
+        // Validation des données
+        if (!data || !Array.isArray(data)) return [];
+
+        // Récupération de la fonction de tri
+        const sortFn = this.sortFunctions[option];
+        if (!sortFn) return data;
+
+        // Application du tri
+        const isAscending = direction === 'desc';
+        return [...data].sort((a, b) => sortFn(a, b, isAscending));
     }
 
     render() {
         const menuStructure = {
             tag: 'div',
             className: 'sort-menu',
-            attrs: { 
+            attrs: {
                 role: 'region',
                 'aria-label': 'Options de tri'
             },
@@ -26,115 +59,29 @@ export class SortMenu {
                     className: 'sort-label',
                     text: 'Trier par',
                     attrs: { id: 'sort-label' }
-                },
-                {
-                    tag: 'div',
-                    className: 'dropdown',
-                    attrs: { role: 'listbox' },
-                    children: [
-                        {
-                            tag: 'button',
-                            className: 'dropdown-toggle',
-                            attrs: {
-                                'aria-haspopup': 'listbox',
-                                'aria-expanded': 'false',
-                                'aria-labelledby': 'sort-label',
-                                'aria-controls': 'sort-options'
-                            },
-                            children: [
-                                {
-                                    tag: 'span',
-                                    text: this.currentOption.label
-                                },
-                                {
-                                    tag: 'i',
-                                    className: 'fa-solid fa-chevron-down sort-direction',
-                                    attrs: {
-                                        'aria-hidden': 'true'
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            tag: 'div',
-                            className: 'dropdown-menu',
-                            attrs: {
-                                id: 'sort-options',
-                                role: 'listbox',
-                                'aria-label': 'Options de tri disponibles'
-                            },
-                            children: this.options.reduce((acc, option, index) => {
-                                if (index > 0) acc.push({ 
-                                    tag: 'hr',
-                                    attrs: { role: 'separator' }
-                                });
-                                acc.push({
-                                    tag: 'button',
-                                    className: this.currentOption.id === option.id ? 'active' : '',
-                                    attrs: {
-                                        role: 'option',
-                                        'aria-selected': this.currentOption.id === option.id,
-                                        'data-sort': option.id
-                                    },
-                                    text: option.label
-                                });
-                                return acc;
-                            }, [])
-                        }
-                    ]
                 }
             ]
         };
 
         const menu = buildElement(menuStructure);
-        const toggle = menu.querySelector('.dropdown-toggle');
-        const dropdownMenu = menu.querySelector('.dropdown-menu');
 
-        // Toggle du menu
-        toggle.onclick = () => {
-            const isExpanded = dropdownMenu.classList.contains('show');
-            dropdownMenu.classList.toggle('show');
-            toggle.classList.toggle('open');
-            toggle.setAttribute('aria-expanded', !isExpanded);
-        };
-
-        // Sélection d'une option
-        dropdownMenu.querySelectorAll('button').forEach(button => {
-            button.onclick = () => {
-                const sortId = button.dataset.sort;
-
-                if (sortId === this.currentOption.id) {
-                    this.isAscending = !this.isAscending;
-                } else {
-                    this.currentOption = this.options.find(opt => opt.id === sortId);
-                    this.isAscending = true;
-                }
-
-                // Mise à jour UI et ARIA
-                toggle.querySelector('span').textContent = this.currentOption.label;
-                dropdownMenu.querySelectorAll('button').forEach(btn => {
-                    const isSelected = btn.dataset.sort === sortId;
-                    btn.classList.toggle('active', isSelected);
-                    btn.setAttribute('aria-selected', isSelected);
-                });
-
-                toggle.classList.remove('open');
-                dropdownMenu.classList.remove('show');
-                toggle.setAttribute('aria-expanded', 'false');
-                toggle.focus();
-                
-                this.onSortChange(sortId, this.isAscending);
-            };
-        });
-
-        // Ferme le menu si clic en dehors
-        document.addEventListener('click', e => {
-            if (!menu.contains(e.target)) {
-                dropdownMenu.classList.remove('show');
-                toggle.classList.remove('open');
-                toggle.setAttribute('aria-expanded', 'false');
+        // Création du dropdown menu
+        const dropdownMenu = new DropdownMenu({
+            items: this.options,
+            defaultOption: this.currentOption,
+            labelId: 'sort-label',
+            menuId: 'sort-options',
+            menuLabel: 'Options de tri disponibles',
+            showSeparators: true,
+            onChange: ({ option, direction }) => {
+                this.currentOption = option;
+                // Appel du callback avec l'option et la direction
+                this.onSortChange(option.id, direction);
             }
         });
+
+        // Ajout du dropdown au menu de tri
+        menu.appendChild(dropdownMenu.render());
 
         return menu;
     }

@@ -6,6 +6,7 @@
 @import url("../scripts/components/modals/lightbox-modal/lightbox-modal.css");
 @import url("../scripts/components/modals/contact-modal/contact-modal.css");
 @import url('../scripts/components/sort-menu/sort-menu.css');
+@import url('../scripts/components/dropdown-menu/dropdown-menu.css');
 
 * {
     padding: 0;
