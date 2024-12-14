@@ -9,6 +9,7 @@ export class TotalLikes {
             price: photographerPrice
         };
 
+        // Initialisation avec la structure
         this.storage = structure.storage;
         this.mediaList = structure.list;
         this.photographerPrice = structure.price;
@@ -16,6 +17,17 @@ export class TotalLikes {
         
         // Écouter les événements de like
         document.addEventListener('likeUpdated', () => this.update());
+    }
+
+    calculateTotalLikes() {
+        return this.storage.getTotalLikes(this.mediaList);
+    }
+
+    update() {
+        this.totalLikes = this.calculateTotalLikes();
+        if (this.element) {
+            this.element.querySelector('.likes-count span').textContent = this.totalLikes;
+        }
     }
 
     render() {
@@ -52,17 +64,5 @@ export class TotalLikes {
 
         this.element = buildElement(overlayStructure);
         return this.element;
-    }
-
-    calculateTotalLikes() {
-        return this.storage.getTotalLikes(this.mediaList);
-    }
-
-    update() {
-        this.totalLikes = this.calculateTotalLikes();
-        const likesNumber = this.element?.querySelector('.likes-count span');
-        if (likesNumber) {
-            likesNumber.textContent = this.totalLikes;
-        }
     }
 }
