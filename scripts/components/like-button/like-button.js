@@ -3,16 +3,26 @@ import { LocalStorageManager } from '../../utils/local-storage.js';
 
 export class LikeButton {
     constructor(mediaId, initialLikes) {
-        const structure = {
-            storage: new LocalStorageManager(),
-            id: mediaId,
-            initial: initialLikes
-        };
+        this.storage = new LocalStorageManager();
+        this.mediaId = mediaId;
+        this.initialLikes = initialLikes;
+        this.likes = this.storage.getLikes(mediaId, initialLikes);
+        this.isLiked = this.storage.getLikeState(mediaId);
+    }
 
-        this.storage = structure.storage;
-        this.mediaId = structure.id;
-        this.likes = this.storage.getLikes(this.mediaId) || structure.initial;
-        this.isLiked = this.storage.getLikeState(this.mediaId);
+    toggleLike() {
+        const newState = this.storage.updateLikeState(
+            this.mediaId,
+            !this.isLiked,
+            this.initialLikes
+        );
+
+        this.likes = newState.likes;
+        this.isLiked = newState.isLiked;
+
+        document.dispatchEvent(new CustomEvent('likeUpdated'));
+
+        return { likes: this.likes, isLiked: this.isLiked };
     }
 
     render() {
@@ -52,17 +62,5 @@ export class LikeButton {
         };
 
         return element;
-    }
-
-    toggleLike() {
-        this.isLiked = !this.isLiked;
-        this.likes = this.isLiked ? this.likes + 1 : this.likes - 1;
-
-        this.storage.saveLikeState(this.mediaId, this.isLiked);
-        this.storage.saveLikes(this.mediaId, this.likes);
-
-        document.dispatchEvent(new CustomEvent('likeUpdated'));
-        
-        return { likes: this.likes, isLiked: this.isLiked };
     }
 }
