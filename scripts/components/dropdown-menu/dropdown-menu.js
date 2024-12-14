@@ -126,18 +126,11 @@ export class DropdownMenu {
                 this.element.setAttribute('data-sort-direction', direction);
 
                 console.log(
-                    `Tri %c${this.currentOption.label}%c | Direction: %c${
-                        this.isAscending ? '↑ ascendant' : 
-                        this.isDescending ? '↓ descendant' : 
-                        '⭐ aucun tri'
-                    }`,
-                    'color: #2196f3; font-weight: bold',
-                    'color: inherit',
-                    `color: ${
-                        this.isAscending ? '#4CAF50' : 
-                        this.isDescending ? '#f44336' : 
-                        '#9e9e9e'
-                    }; font-weight: bold`
+                    `Tri: ${this.currentOption.label} | ${
+                        this.isAscending ? 'ascendant' :
+                        this.isDescending ? 'descendant' :
+                        'aucun tri'
+                    }`
                 );
 
                 this.onChange({
@@ -151,13 +144,47 @@ export class DropdownMenu {
             button.onclick = () => {
                 const value = button.dataset.value;
                 const selectedOption = this.options.items.find(opt => opt.id === value);
-                
+
                 this.currentOption = selectedOption;
                 toggle.querySelector('span').textContent = selectedOption.label;
 
-                this.sortDirection = 'none';
-                this.element.setAttribute('data-sort-direction', this.sortDirection);
+                // Appliquer le tri par défaut selon l'option sélectionnée
+                let defaultDirection;
+                switch (value) {
+                    case 'popularity':
+                        defaultDirection = 'asc';
+                        this.isAscending = true;
+                        this.isDescending = false;
+                        break;
+                    case 'date':
+                        defaultDirection = 'asc';
+                        this.isAscending = true;
+                        this.isDescending = false;
+                        break;
+                    case 'title':
+                        defaultDirection = 'asc';
+                        this.isAscending = true;
+                        this.isDescending = false;
+                        break;
+                    default:
+                        defaultDirection = 'none';
+                        this.isAscending = false;
+                        this.isDescending = false;
+                }
 
+                this.sortDirection = defaultDirection;
+                this.element.setAttribute('data-sort-direction', defaultDirection);
+
+                console.log('État par défaut :', {
+                    option: selectedOption.label,
+                    direction: defaultDirection,
+                    sortDirection: this.sortDirection,
+                    attributeDirection: this.element.getAttribute('data-sort-direction'),
+                    isAscending: this.isAscending,
+                    isDescending: this.isDescending
+                });
+
+                // Mise à jour du menu
                 const newOptions = this.options.items
                     .filter(opt => opt.id !== selectedOption.id)
                     .map(opt => {
@@ -174,11 +201,14 @@ export class DropdownMenu {
 
                 this.setupEventListeners(dropdown);
 
+                // Fermer le menu et déclencher le tri
                 this.toggleMenu(false, toggle, menu, dropdown);
                 toggle.focus();
+
+                // Déclencher le tri avec la direction par défaut
                 this.onChange({
                     option: selectedOption,
-                    direction: this.sortDirection
+                    direction: defaultDirection
                 });
             };
         });
