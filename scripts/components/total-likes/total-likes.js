@@ -3,18 +3,11 @@ import { LocalStorageManager } from '../../utils/local-storage.js';
 
 export class TotalLikes {
     constructor(mediaList, photographerPrice) {
-        const structure = {
-            storage: new LocalStorageManager(),
-            list: mediaList,
-            price: photographerPrice
-        };
-
-        // Initialisation avec la structure
-        this.storage = structure.storage;
-        this.mediaList = structure.list;
-        this.photographerPrice = structure.price;
+        this.storage = new LocalStorageManager();
+        this.mediaList = mediaList;
+        this.photographerPrice = photographerPrice;
         this.totalLikes = this.calculateTotalLikes();
-        
+
         // Écouter les événements de like
         document.addEventListener('likeUpdated', () => this.update());
     }
