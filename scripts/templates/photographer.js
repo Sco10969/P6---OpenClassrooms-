@@ -35,7 +35,7 @@ export function photographerTemplate(photographerState) {
                                 className: 'portrait',
                                 attrs: {
                                     src: `assets/photographers/${photographerData.portrait}`,
-                                    alt: `Portrait de ${photographerData.name}`
+                                    alt: `${photographerData.name}`
                                 }
                             }]
                         },

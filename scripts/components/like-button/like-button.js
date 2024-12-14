@@ -33,17 +33,25 @@ export class LikeButton {
                 {
                     tag: 'span',
                     className: 'likes-count',
+                    attrs: {
+                        'aria-label': `${this.likes} likes`
+                    },
                     text: this.likes
                 },
                 {
                     tag: 'button',
                     className: `like-button ${this.isLiked ? 'liked' : ''}`,
+                    attrs: {
+                        'aria-label': this.isLiked ? 'Retirer le like' : 'Ajouter un like',
+                        'aria-pressed': this.isLiked ? 'true' : 'false'
+                    },
                     children: [{
                         tag: 'img',
                         className: this.isLiked ? 'liked' : '',
                         attrs: {
                             src: 'assets/icons/favorite-24px 1.svg',
-                            alt: 'like icon'
+                            alt: '',
+                            'aria-hidden': 'true'
                         }
                     }]
                 }
@@ -57,7 +65,10 @@ export class LikeButton {
         button.onclick = () => {
             const state = this.toggleLike();
             element.querySelector('.likes-count').textContent = state.likes;
+            element.querySelector('.likes-count').setAttribute('aria-label', `${state.likes} likes`);
             button.classList.toggle('liked');
+            button.setAttribute('aria-pressed', state.isLiked ? 'true' : 'false');
+            button.setAttribute('aria-label', state.isLiked ? 'Retirer le like' : 'Ajouter un like');
             button.querySelector('img').classList.toggle('liked');
         };
 
