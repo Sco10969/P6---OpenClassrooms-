@@ -2,11 +2,9 @@ import { buildElement } from '../../utils/dom-utils.js';
 import { ContactModal } from '../modals/contact-modal/contact-modal.js';
 
 export class PhotographerHeader {
-    #photographer;
-
     constructor(photographer) {
-        this.#photographer = photographer;
-        this.contactModal = new ContactModal(this.#photographer.name);
+        this.photographer = photographer;
+        this.contactModal = new ContactModal(photographer.name);
     }
 
     render() {
@@ -22,17 +20,17 @@ export class PhotographerHeader {
                         {
                             tag: 'h1',
                             className: 'name',
-                            text: this.#photographer.name
+                            text: this.photographer.name
                         },
                         {
                             tag: 'p',
                             className: 'location',
-                            text: `${this.#photographer.city}, ${this.#photographer.country}`
+                            text: `${this.photographer.city}, ${this.photographer.country}`
                         },
                         {
                             tag: 'p',
                             className: 'tagline',
-                            text: this.#photographer.tagline
+                            text: this.photographer.tagline
                         }
                     ]
                 },
@@ -49,8 +47,8 @@ export class PhotographerHeader {
                 {
                     tag: 'img',
                     attrs: {
-                        src: `assets/photographers/${this.#photographer.portrait}`,
-                        alt: this.#photographer.name
+                        src: `assets/photographers/${this.photographer.portrait}`,
+                        alt: this.photographer.name
                     }
                 }
             ]

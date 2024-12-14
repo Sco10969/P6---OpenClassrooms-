@@ -3,8 +3,8 @@ import { ModalTemplate } from '../../../utils/modal-template.js';
 
 export class ContactModal extends ModalTemplate {
     constructor(photographerName) {
-        const contactContainer = document.querySelector('#contact_modal');
-        super('Contact', 'contact-modal', contactContainer);
+        super('Contactez-moi', 'contact-modal');
+        this.photographerName = photographerName;
         this.buildContactForm(photographerName);
     }
 
