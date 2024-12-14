@@ -87,14 +87,17 @@ export class MediaCard {
     }
 
     getAllMedias() {
-        const mediaCards = Array.from(document.querySelectorAll('.media-card'));
-        return mediaCards.map(card => ({
-            id: card.dataset.mediaId,
-            title: card.querySelector('.media-title').textContent,
-            photographerName: this.photographerName,
-            image: card.querySelector('img')?.dataset.filename,
-            video: card.querySelector('video')?.dataset.filename
-        }));
+        if (!this.mediaList) {
+            const mediaCards = Array.from(document.querySelectorAll('.media-card'));
+            this.mediaList = mediaCards.map(card => ({
+                id: card.dataset.mediaId,
+                title: card.querySelector('.media-title').textContent,
+                photographerName: this.photographerName,
+                image: card.querySelector('img')?.dataset.filename,
+                video: card.querySelector('video')?.dataset.filename
+            }));
+        }
+        return this.mediaList;
     }
 
     getCurrentIndex() {
