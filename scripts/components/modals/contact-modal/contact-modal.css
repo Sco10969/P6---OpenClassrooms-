@@ -103,6 +103,7 @@
     height: 68px;
     border: none;
     border-radius: 5px;
+    padding: 0 10px;
 }
 
 .contact-modal form textarea {
@@ -111,6 +112,8 @@
     border-radius: 5px;
     margin-bottom: 2.6rem;
     border: none;
+    padding: 10px;
+    resize: none;
 }
 
 .formData[data-error-visible="true"] .error-msg {
