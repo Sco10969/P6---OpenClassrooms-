@@ -152,15 +152,7 @@ export class DropdownMenu {
                 let defaultDirection;
                 switch (value) {
                     case 'popularity':
-                        defaultDirection = 'asc';
-                        this.isAscending = true;
-                        this.isDescending = false;
-                        break;
                     case 'date':
-                        defaultDirection = 'asc';
-                        this.isAscending = true;
-                        this.isDescending = false;
-                        break;
                     case 'title':
                         defaultDirection = 'asc';
                         this.isAscending = true;
