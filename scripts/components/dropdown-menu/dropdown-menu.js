@@ -164,14 +164,11 @@ export class DropdownMenu {
                         this.isDescending = false;
                 }
 
-                this.sortDirection = defaultDirection;
                 this.element.setAttribute('data-sort-direction', defaultDirection);
 
                 console.log('État par défaut :', {
                     option: selectedOption.label,
                     direction: defaultDirection,
-                    sortDirection: this.sortDirection,
-                    attributeDirection: this.element.getAttribute('data-sort-direction'),
                     isAscending: this.isAscending,
                     isDescending: this.isDescending
                 });
@@ -214,7 +211,7 @@ export class DropdownMenu {
 
     toggleMenu(isOpen, toggle, menu, dropdown) {
         toggle.setAttribute('aria-expanded', isOpen);
-        menu.setAttribute('aria-expanded', isOpen);
         dropdown.setAttribute('data-expanded', isOpen);
+        menu.setAttribute('aria-expanded', isOpen);
     }
 } 
