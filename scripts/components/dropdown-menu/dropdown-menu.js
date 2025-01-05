@@ -37,10 +37,7 @@ export class DropdownMenu {
                         {
                             tag: 'i',
                             className: 'chevron-icon fa-solid fa-chevron-down',
-                            attrs: { 
-                                'aria-hidden': 'true',
-                                'style': 'transition: transform 0.3s ease'
-                            }
+                            attrs: { 'aria-hidden': 'true' }
                         }
                     ]
                 },
@@ -105,9 +102,6 @@ export class DropdownMenu {
 
                 menu.innerHTML = '';
                 newOptions.forEach(opt => menu.appendChild(opt));
-
-                // Mettre à jour l'aria-selected du toggle
-                toggle.setAttribute('aria-selected', 'true');
 
                 this.setupEventListeners(dropdown);
 
