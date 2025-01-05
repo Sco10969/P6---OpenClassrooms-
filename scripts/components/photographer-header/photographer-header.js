@@ -9,7 +9,7 @@ export class PhotographerHeader {
 
     render() {
         const headerStructure = {
-            tag: 'article',
+            tag: 'header',
             className: 'photographer_header',
             children: [
                 // Info Section
@@ -23,14 +23,20 @@ export class PhotographerHeader {
                             text: this.photographer.name
                         },
                         {
-                            tag: 'p',
-                            className: 'location',
-                            text: `${this.photographer.city}, ${this.photographer.country}`
-                        },
-                        {
-                            tag: 'p',
-                            className: 'tagline',
-                            text: this.photographer.tagline
+                            tag: 'div',
+                            className: 'details',
+                            children: [
+                                {
+                                    tag: 'p',
+                                    className: 'location',
+                                    text: `${this.photographer.city}, ${this.photographer.country}`
+                                },
+                                {
+                                    tag: 'p',
+                                    className: 'tagline',
+                                    text: this.photographer.tagline
+                                }
+                            ]
                         }
                     ]
                 },
@@ -40,16 +46,22 @@ export class PhotographerHeader {
                     className: 'contact_button',
                     text: 'Contactez-moi',
                     attrs: {
-                        'aria-label': 'Contacter le photographe'
+                        'aria-label': `Contacter ${this.photographer.name}`,
+                        type: 'button'
                     }
                 },
-                // Portrait
+                // Portrait Container
                 {
-                    tag: 'img',
-                    attrs: {
-                        src: `assets/photographers/${this.photographer.portrait}`,
-                        alt: this.photographer.name
-                    }
+                    tag: 'div',
+                    className: 'portrait-container',
+                    children: [{
+                        tag: 'img',
+                        className: 'portrait',
+                        attrs: {
+                            src: `assets/photographers/${this.photographer.portrait}`,
+                            alt: `Portrait de ${this.photographer.name}`
+                        }
+                    }]
                 }
             ]
         };

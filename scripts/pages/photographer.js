@@ -29,10 +29,6 @@ class PhotographerPage {
                     ]
                 },
                 {
-                    tag: 'div',
-                    className: 'photographer_header'
-                },
-                {
                     tag: 'main',
                     className: 'media_section',
                     attrs: {
@@ -75,7 +71,7 @@ class PhotographerPage {
 
         // Header
         const header = new PhotographerHeader(photographerData);
-        document.querySelector('.photographer_header').appendChild(header.render());
+        document.querySelector('main').before(header.render());
 
         // Menu de tri
         const sortMenu = new SortMenu((sortOption, direction) => {
