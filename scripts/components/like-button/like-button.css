@@ -24,6 +24,7 @@
     width: 21px;
     height: 24px;
     transition: transform 0.3s ease;
+    filter: brightness(0) saturate(100%) invert(77%) sepia(38%) saturate(299%) hue-rotate(324deg) brightness(84%) contrast(82%);
 }
 
 .like-button:hover img {
@@ -31,5 +32,5 @@
 }
 
 .like-button.liked img {
-    filter: brightness(0) saturate(100%) invert(77%) sepia(38%) saturate(299%) hue-rotate(324deg) brightness(84%) contrast(82%);
+    filter: none;
 }
