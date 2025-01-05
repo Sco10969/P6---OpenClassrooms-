@@ -25,7 +25,9 @@ export class DropdownMenu {
                     attrs: {
                         'aria-expanded': 'false',
                         'aria-labelledby': this.labelId,
-                        'aria-controls': this.menuId
+                        'aria-controls': this.menuId,
+                        'aria-selected': 'true',
+                        role: 'option'
                     },
                     children: [
                         {
@@ -103,6 +105,9 @@ export class DropdownMenu {
 
                 menu.innerHTML = '';
                 newOptions.forEach(opt => menu.appendChild(opt));
+
+                // Mettre à jour l'aria-selected du toggle
+                toggle.setAttribute('aria-selected', 'true');
 
                 this.setupEventListeners(dropdown);
 
