@@ -13,26 +13,17 @@ export class SortMenu {
 
         // Définition des fonctions de tri pour chaque option
         this.sortFunctions = {
-            popularity: (a, b, isAscending) =>
-                // Tri par likes
-                isAscending ? a.likes - b.likes : b.likes - a.likes,
-           
-            date: (a, b, isAscending) => {
-                 // Tri par date
+            popularity: (a, b) => b.likes - a.likes, // Tri décroissant par défaut
+            date: (a, b) => {
                 const dateA = new Date(a.date);
                 const dateB = new Date(b.date);
-                return isAscending ? dateA - dateB : dateB - dateA;
+                return dateA - dateB; // Tri croissant par défaut
             },
-
-            title: (a, b, isAscending) =>
-                // Tri alphabétique
-                isAscending ? 
-                    a.title.localeCompare(b.title) : 
-                    b.title.localeCompare(a.title)
+            title: (a, b) => a.title.localeCompare(b.title) // Tri alphabétique par défaut
         };
     }
 
-    sortData(data, option, direction) {
+    sortData(data, option) {
         // Validation des données
         if (!data || !Array.isArray(data)) return [];
 
@@ -41,8 +32,7 @@ export class SortMenu {
         if (!sortFn) return data;
 
         // Application du tri
-        const isAscending = direction === 'desc';
-        return [...data].sort((a, b) => sortFn(a, b, isAscending));
+        return [...data].sort((a, b) => sortFn(a, b));
     }
 
     render() {
@@ -73,16 +63,14 @@ export class SortMenu {
             menuId: 'sort-options',
             menuLabel: 'Options de tri disponibles',
             showSeparators: true,
-            onChange: ({ option, direction }) => {
+            onChange: (option) => {
                 this.currentOption = option;
-                // Appel du callback avec l'option et la direction
-                this.onSortChange(option.id, direction);
+                // Appel du callback avec l'option uniquement
+                this.onSortChange(option.id);
             }
         });
 
-        // Ajout du dropdown au menu de tri
         menu.appendChild(dropdownMenu.render());
-
         return menu;
     }
 }

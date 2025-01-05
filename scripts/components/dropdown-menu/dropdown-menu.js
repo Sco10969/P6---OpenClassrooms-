@@ -8,10 +8,7 @@ export class DropdownMenu {
         this.labelId = options.labelId || 'dropdown-label';
         this.menuId = options.menuId || 'dropdown-options';
         this.onChange = options.onChange || (() => {});
-        this.isAscending = false;
-        this.isDescending = false;
         this.element = null;
-        this.sortDirection = 'none';
     }
 
     render() {
@@ -19,8 +16,7 @@ export class DropdownMenu {
             tag: 'div',
             className: 'dropdown',
             attrs: {
-                'data-expanded': 'false',
-                'data-sort-direction': this.sortDirection
+                'data-expanded': 'false'
             },
             children: [
                 {
@@ -37,20 +33,12 @@ export class DropdownMenu {
                             text: this.currentOption.label
                         },
                         {
-                            tag: 'div',
-                            className: 'sort-icons',
-                            children: [
-                                {
-                                    tag: 'i',
-                                    className: 'sort-icon sort-asc fa-solid fa-chevron-up',
-                                    attrs: { 'aria-hidden': 'true' }
-                                },
-                                {
-                                    tag: 'i',
-                                    className: 'sort-icon sort-desc fa-solid fa-chevron-down',
-                                    attrs: { 'aria-hidden': 'true' }
-                                }
-                            ]
+                            tag: 'i',
+                            className: 'chevron-icon fa-solid fa-chevron-down',
+                            attrs: { 
+                                'aria-hidden': 'true',
+                                'style': 'transition: transform 0.3s ease'
+                            }
                         }
                     ]
                 },
@@ -87,58 +75,11 @@ export class DropdownMenu {
     setupEventListeners(dropdown) {
         const toggle = dropdown.querySelector('.dropdown-toggle');
         const menu = dropdown.querySelector('.dropdown-menu');
-        const sortIcons = dropdown.querySelectorAll('.sort-icon');
 
         toggle.onclick = () => {
             const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
             this.toggleMenu(!isExpanded, toggle, menu, dropdown);
         };
-
-        // Gestion des flèches de tri
-        sortIcons.forEach(icon => {
-            icon.onclick = (e) => {
-                e.stopPropagation();
-
-                const isDescIcon = icon.classList.contains('sort-desc');
-
-                if (isDescIcon) {
-                    if (this.isDescending) {
-                        this.isDescending = false;
-                        this.isAscending = false;
-                    } else {
-                        this.isDescending = true;
-                        this.isAscending = false;
-                    }
-                } else {
-                    if (this.isAscending) {
-                        this.isAscending = false;
-                        this.isDescending = false;
-                    } else {
-                        this.isAscending = true;
-                        this.isDescending = false;
-                    }
-                }
-
-                let direction = 'none';
-                if (this.isAscending) direction = 'asc';
-                if (this.isDescending) direction = 'desc';
-
-                this.element.setAttribute('data-sort-direction', direction);
-
-                console.log(
-                    `Tri: ${this.currentOption.label} | ${
-                        this.isAscending ? 'ascendant' :
-                        this.isDescending ? 'descendant' :
-                        'aucun tri'
-                    }`
-                );
-
-                this.onChange({
-                    option: this.currentOption,
-                    direction: direction
-                });
-            };
-        });
 
         menu.querySelectorAll('button').forEach(button => {
             button.onclick = () => {
@@ -147,31 +88,6 @@ export class DropdownMenu {
 
                 this.currentOption = selectedOption;
                 toggle.querySelector('span').textContent = selectedOption.label;
-
-                // Appliquer le tri par défaut selon l'option sélectionnée
-                let defaultDirection;
-                switch (value) {
-                    case 'popularity':
-                    case 'date':
-                    case 'title':
-                        defaultDirection = 'asc';
-                        this.isAscending = true;
-                        this.isDescending = false;
-                        break;
-                    default:
-                        defaultDirection = 'none';
-                        this.isAscending = false;
-                        this.isDescending = false;
-                }
-
-                this.element.setAttribute('data-sort-direction', defaultDirection);
-
-                console.log('État par défaut :', {
-                    option: selectedOption.label,
-                    direction: defaultDirection,
-                    isAscending: this.isAscending,
-                    isDescending: this.isDescending
-                });
 
                 // Mise à jour du menu
                 const newOptions = this.options.items
@@ -190,15 +106,12 @@ export class DropdownMenu {
 
                 this.setupEventListeners(dropdown);
 
-                // Fermer le menu et déclencher le tri
+                // Fermer le menu et déclencher le callback
                 this.toggleMenu(false, toggle, menu, dropdown);
                 toggle.focus();
 
-                // Déclencher le tri avec la direction par défaut
-                this.onChange({
-                    option: selectedOption,
-                    direction: defaultDirection
-                });
+                // Déclencher le callback avec l'option sélectionnée
+                this.onChange(selectedOption);
             };
         });
 
@@ -213,5 +126,9 @@ export class DropdownMenu {
         toggle.setAttribute('aria-expanded', isOpen);
         dropdown.setAttribute('data-expanded', isOpen);
         menu.setAttribute('aria-expanded', isOpen);
+        
+        // Rotation du chevron
+        const chevron = toggle.querySelector('.chevron-icon');
+        chevron.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
     }
 } 
