@@ -23,6 +23,7 @@ export class DropdownMenu {
                     tag: 'button',
                     className: 'dropdown-toggle',
                     attrs: {
+                        id: this.options.toggleId,
                         'aria-expanded': 'false',
                         'aria-labelledby': this.labelId,
                         'aria-controls': this.menuId,

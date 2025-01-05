@@ -45,10 +45,13 @@ export class SortMenu {
             },
             children: [
                 {
-                    tag: 'span',
+                    tag: 'label',
                     className: 'sort-label',
                     text: 'Trier par',
-                    attrs: { id: 'sort-label' }
+                    attrs: { 
+                        id: 'sort-label',
+                        for: 'sort-toggle'
+                    }
                 }
             ]
         };
@@ -61,11 +64,11 @@ export class SortMenu {
             defaultOption: this.currentOption,
             labelId: 'sort-label',
             menuId: 'sort-options',
+            toggleId: 'sort-toggle',
             menuLabel: 'Options de tri disponibles',
             showSeparators: true,
             onChange: (option) => {
                 this.currentOption = option;
-                // Appel du callback avec l'option uniquement
                 this.onSortChange(option.id);
             }
         });
