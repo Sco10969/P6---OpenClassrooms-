@@ -40,11 +40,11 @@ export class ModalTemplate {
         };
         
         // Ferme la modale avec la touche Échap
-        document.addEventListener('keydown', e => {
-            if (this.modal.querySelector('.modal-wrapper-content').contains(e.target)) {
-                e.stopPropagation();
-                return;
-            }
+        this.modal.querySelector('.modal-wrapper').addEventListener('keydown', e => {
+            // if (this.modal.querySelector('.modal-wrapper-content').contains(e.target)) {
+            //     e.stopPropagation();
+            //     return;
+            // }
             if (e.key === 'Escape') this.close();
         });
     }
@@ -79,6 +79,7 @@ export class ModalTemplate {
         this.modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
         document.querySelector('main').setAttribute('inert', '');
+        this.modal.querySelector('.modal-wrapper').focus();
     }
 
     close() {

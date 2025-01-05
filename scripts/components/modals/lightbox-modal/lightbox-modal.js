@@ -85,10 +85,10 @@ export class LightboxModal extends ModalTemplate {
     open(media, index) {
         super.open();
         this.currentIndex = index;
-        this.showMedia(index);
+        this.showMedia(index, true);
     }
 
-    showMedia(index) {
+    showMedia(index, focus = false) {
         if (index < 0 || index >= this.mediaList.length) {
             index = 0;
         }
@@ -97,12 +97,14 @@ export class LightboxModal extends ModalTemplate {
         const media = this.mediaList[index];
 
         this.mediaContainer.innerHTML = '';
+        let element = null;
 
         if (media.image) {
             const img = document.createElement('img');
             img.src = `assets/medias/${media.photographerName}/${media.image}`;
             img.alt = media.title;
             this.mediaContainer.appendChild(img);
+            element = img;
         } else if (media.video) {
             const video = document.createElement('video');
             video.autoplay = true;
@@ -117,6 +119,14 @@ export class LightboxModal extends ModalTemplate {
 
             video.appendChild(source);
             this.mediaContainer.appendChild(video);
+            element = video;
+        }
+
+        if (element) {
+            element.tabIndex = 0;
+            if (focus) {
+                element.focus();
+            }
         }
 
         this.title.textContent = media.title;

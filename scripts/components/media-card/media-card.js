@@ -46,11 +46,22 @@ export class MediaCard {
 
         const card = buildElement(cardStructure);
 
+        
         // Event pour la lightbox
-        card.querySelector('.media-wrapper').onclick = () => {
+        const openMedia = () => {
             this.lightbox.mediaList = this.getAllMedias();
             this.lightbox.open(this.media, this.getCurrentIndex());
         };
+        const cardWrapper = card.querySelector('.media-wrapper');
+        cardWrapper.tabIndex = 0;
+        cardWrapper.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                openMedia();
+            }
+        });
+        cardWrapper.onclick = openMedia;
+
+
 
         return card;
     }
