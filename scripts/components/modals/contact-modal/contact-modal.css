@@ -11,10 +11,9 @@
     box-shadow: -5px 30px 10px rgba(0, 0, 0, 0.2);
 }
 
-.contact-modal header {
+.contact-modal .modal-header {
     position: relative;
     width: 100%;
-    padding-bottom: 2rem;
 }
 
 .contact-modal .title-container {
@@ -22,14 +21,14 @@
     flex-direction: column;
 }
 
-.contact-modal header h2 {
+.contact-modal .modal-header h2 {
     font-size: 64px;
     font-weight: normal;
     margin: 0;
     color: #000;
 }
 
-.contact-modal header .photographer-name {
+.contact-modal .modal-header .photographer-name {
     font-size: 64px;
     font-weight: normal;
     color: #000;

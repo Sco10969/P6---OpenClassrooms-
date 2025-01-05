@@ -19,7 +19,7 @@ export class ModalTemplate {
             children: [{
                 tag: 'div',
                 className: 'modal-wrapper',
-                attrs: { 'aria-label': 'image closeup view' },
+                attrs: { 'aria-label': 'image closeup view', tabindex: '-1' },
                 children: [{
                     tag: 'div',
                     className: 'modal-wrapper-content',
@@ -89,7 +89,6 @@ export class ModalTemplate {
         this.modal.style.display = 'none';
         document.body.style.overflow = 'auto';
         document.querySelector('main').removeAttribute('inert');
-
 
         if (this.lastFocusElement) {
             this.lastFocusElement.focus();

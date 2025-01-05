@@ -14,7 +14,8 @@ export class ContactModal extends ModalTemplate {
             className: 'modal-content',
             children: [
                 {
-                    tag: 'header',
+                    tag: 'div',
+                    className: 'modal-header',
                     children: [{
                         tag: 'div',
                         className: 'title-container',
