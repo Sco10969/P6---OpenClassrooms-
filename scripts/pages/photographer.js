@@ -3,12 +3,47 @@ import { PhotographerHeader } from '../components/photographer-header/photograph
 import { TotalLikes } from '../components/total-likes/total-likes.js';
 import { LightboxModal } from '../components/modals/lightbox-modal/lightbox-modal.js';
 import { SortMenu } from '../components/sort-menu/sort-menu.js';
+import { Logo } from '../components/logo/logo.js';
+import { buildElement } from '../utils/dom-utils.js';
 
 class PhotographerPage {
     constructor() {
         this.photographerId = new URLSearchParams(window.location.search).get('id');
         this.mediaSetup = null;
         this.lightbox = new LightboxModal();
+        this.app = document.getElementById('app');
+    }
+
+    render() {
+        const logo = new Logo().render();
+
+        const pageStructure = {
+            tag: 'div',
+            className: 'container',
+            children: [
+                {
+                    tag: 'header',
+                    attrs: { role: 'banner' },
+                    children: [
+                        logo
+                    ]
+                },
+                {
+                    tag: 'div',
+                    className: 'photographer_header'
+                },
+                {
+                    tag: 'main',
+                    className: 'media_section',
+                    attrs: {
+                        role: 'main',
+                        'aria-label': 'Galerie du photographe'
+                    }
+                }
+            ]
+        };
+
+        this.app.appendChild(buildElement(pageStructure));
     }
 
     init() {
@@ -28,6 +63,7 @@ class PhotographerPage {
                     mediaItem => mediaItem.photographerId == this.photographerId
                 );
 
+                this.render();
                 this.displayPhotographer(photographerData, mediaData);
             })
             .catch(error => console.error('Erreur:', error));

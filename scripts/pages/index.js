@@ -1,24 +1,15 @@
 import { buildElement } from '../utils/dom-utils.js';
 import { photographerTemplate } from '../templates/photographer.js';
+import { Logo } from '../components/logo/logo.js';
 
 class IndexPage {
     constructor() {
-        this.photographersSection = document.querySelector(".photographer_section");
-    }
-
-    init() {
-        fetch('./data/photographers.json')
-            .then(response => response.json())
-            .then(data => {
-                data.photographers.forEach(photographer => {
-                    const template = photographerTemplate({ photographerData: photographer });
-                    this.photographersSection.appendChild(template.getUserCardDOM());
-                });
-            })
-            .catch(error => console.error('Erreur:', error));
+        this.app = document.getElementById('app');
     }
 
     render() {
+        const logo = new Logo().render();
+        
         const pageStructure = {
             tag: 'div',
             className: 'container',
@@ -27,24 +18,7 @@ class IndexPage {
                     tag: 'header',
                     attrs: { role: 'banner' },
                     children: [
-                        {
-                            tag: 'a',
-                            className: 'home-link',
-                            attrs: {
-                                href: 'index.html',
-                                'aria-label': 'Fisheye Accueil',
-                                role: 'link'
-                            },
-                            children: [{
-                                tag: 'img',
-                                className: 'logo',
-                                attrs: {
-                                    src: 'assets/images/logo.png',
-                                    alt: 'Fisheye Home page',
-                                    role: 'img'
-                                }
-                            }]
-                        },
+                        logo,
                         {
                             tag: 'h1',
                             text: 'Nos photographes',
@@ -75,7 +49,22 @@ class IndexPage {
             ]
         };
 
-        return buildElement(pageStructure);
+        const element = buildElement(pageStructure);
+        this.app.appendChild(element);
+        this.photographersSection = document.querySelector(".photographer_section");
+    }
+
+    init() {
+        this.render();
+        fetch('./data/photographers.json')
+            .then(response => response.json())
+            .then(data => {
+                data.photographers.forEach(photographer => {
+                    const template = photographerTemplate({ photographerData: photographer });
+                    this.photographersSection.appendChild(template.getUserCardDOM());
+                });
+            })
+            .catch(error => console.error('Erreur:', error));
     }
 }
 

@@ -16,7 +16,12 @@ export class DropdownMenu {
             tag: 'div',
             className: 'dropdown',
             attrs: {
-                'data-expanded': 'false'
+                role: 'combobox',
+                'aria-expanded': 'false',
+                'aria-haspopup': 'listbox',
+                'aria-controls': this.menuId,
+                'aria-label': 'Trier les médias par',
+                'aria-labelledby': this.labelId
             },
             children: [
                 {
@@ -24,16 +29,17 @@ export class DropdownMenu {
                     className: 'dropdown-toggle',
                     attrs: {
                         id: this.options.toggleId,
+                        type: 'button',
                         'aria-expanded': 'false',
-                        'aria-labelledby': this.labelId,
-                        'aria-controls': this.menuId,
-                        'aria-selected': 'true',
-                        role: 'option'
+                        'aria-controls': this.menuId
                     },
                     children: [
                         {
                             tag: 'span',
-                            text: this.currentOption.label
+                            text: this.currentOption.label,
+                            attrs: {
+                                'aria-label': `Option sélectionnée : ${this.currentOption.label}`
+                            }
                         },
                         {
                             tag: 'i',
@@ -43,12 +49,12 @@ export class DropdownMenu {
                     ]
                 },
                 {
-                    tag: 'div',
+                    tag: 'ul',
                     className: 'dropdown-menu',
                     attrs: {
                         id: this.menuId,
                         role: 'listbox',
-                        'aria-label': this.options.menuLabel || 'Options disponibles'
+                        'aria-label': 'Options de tri disponibles'
                     },
                     children: this.options.items
                         .filter(option => option.id !== this.currentOption.id)
@@ -58,7 +64,8 @@ export class DropdownMenu {
                             attrs: {
                                 role: 'option',
                                 'aria-selected': 'false',
-                                'data-value': option.id
+                                'data-value': option.id,
+                                type: 'button'
                             },
                             text: option.label
                         }))
