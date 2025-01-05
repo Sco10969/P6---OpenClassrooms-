@@ -19,6 +19,7 @@ export class ModalTemplate {
             children: [{
                 tag: 'div',
                 className: 'modal-wrapper',
+                attrs: { 'aria-label': 'image closeup view' },
                 children: [{
                     tag: 'div',
                     className: 'modal-wrapper-content',
@@ -50,7 +51,7 @@ export class ModalTemplate {
         const closeButton = buildElement({
             tag: 'button',
             className: 'modal-close',
-            attrs: { 'aria-label': 'Fermer' },
+            attrs: { 'aria-label': 'Fermer la modale' },
             children: [{
                 tag: 'img',
                 attrs: { src: 'assets/icons/close.svg', alt: 'Fermer la modale' }

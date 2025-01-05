@@ -28,7 +28,7 @@ export class LightboxModal extends ModalTemplate {
                                 tag: 'img',
                                 attrs: {
                                     src: 'assets/icons/nav_prev.svg',
-                                    alt: ''
+                                    alt: 'Image précédente'
                                 }
                             }]
                         },
@@ -46,7 +46,7 @@ export class LightboxModal extends ModalTemplate {
                                 tag: 'img',
                                 attrs: {
                                     src: 'assets/icons/nav_next.svg',
-                                    alt: ''
+                                    alt: 'Image suivante'
                                 }
                             }]
                         },
