@@ -6,7 +6,7 @@ export class ModalTemplate {
         this.isOpen = false;
         this.container = container || document.body;
         this.buildModal(modalType);
-        console.log(title);
+        this.lastFocusElement = null;
     }
 
     buildModal(modalType) {
@@ -38,13 +38,9 @@ export class ModalTemplate {
         this.modal.onclick = e => {
             if (e.target === this.modal) this.close();
         };
-        
+
         // Ferme la modale avec la touche Échap
         this.modal.querySelector('.modal-wrapper').addEventListener('keydown', e => {
-            // if (this.modal.querySelector('.modal-wrapper-content').contains(e.target)) {
-            //     e.stopPropagation();
-            //     return;
-            // }
             if (e.key === 'Escape') this.close();
         });
     }
@@ -74,7 +70,10 @@ export class ModalTemplate {
 
     open() {
         if (this.isOpen) return;
-        // Ouvre la modale
+
+        // Sauvegarde l'élément qui avait le focus
+        this.lastFocusElement = document.activeElement;
+
         this.isOpen = true;
         this.modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
@@ -84,11 +83,15 @@ export class ModalTemplate {
 
     close() {
         if (!this.isOpen) return;
-        console.log('close');
-        // Ferme la modale
+
         this.isOpen = false;
         this.modal.style.display = 'none';
         document.body.style.overflow = 'auto';
         document.querySelector('main').removeAttribute('inert');
+
+
+        if (this.lastFocusElement) {
+            this.lastFocusElement.focus();
+        }
     }
 }
