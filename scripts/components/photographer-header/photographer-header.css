@@ -5,13 +5,14 @@
     background-color: #FAFAFA;
     padding: 4rem 5rem;
     border-radius: 5px;
+    flex-wrap: wrap;
+    gap: 2rem;
 }
 
 .photographer_info {
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    max-width: 50%;
 }
 
 .photographer_info .name {

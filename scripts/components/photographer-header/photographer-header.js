@@ -35,6 +35,15 @@ export class PhotographerHeader {
                                     tag: 'p',
                                     className: 'tagline',
                                     text: this.photographer.tagline
+                                },
+                                {
+                                    tag: 'span',
+                                    className: 'price sr-only',
+                                    text: `${this.photographer.price} euro par jour`,
+                                    attrs: {
+                                        'aria-label': `${this.photographer.price} euro par jour`,
+                                        tabindex: '1'
+                                    }
                                 }
                             ]
                         }

@@ -1,15 +1,23 @@
 .total-likes-overlay {
     position: fixed;
     bottom: 0;
-    right: 3.6rem;
+    right: 0;
+    left: 0;
     background-color: #DB8876;
-    border-radius: 5px 5px 0 0;
+    border-radius: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem 3rem;
-    width: 376px;
+    width: 100%;
     z-index: 999;
+
+    @media screen and (min-width: 450px) {
+        left: unset;
+        right: 3.6rem;
+        width: 376px;
+        border-radius: 5px 5px 0 0;
+    }
 }
 
 .total-likes-overlay .likes-count {

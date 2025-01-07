@@ -82,6 +82,16 @@ export class DropdownMenu {
     setupEventListeners(dropdown) {
         const toggle = dropdown.querySelector('.dropdown-toggle');
         const menu = dropdown.querySelector('.dropdown-menu');
+        const toggleSpan = toggle.querySelector('span');
+
+        toggleSpan.onclick = (e) => {
+            e.stopPropagation();
+            this.onChange(this.currentOption);
+            // Ferme le menu si ouvert
+            if (toggle.getAttribute('aria-expanded') === 'true') {
+                this.toggleMenu(false, toggle, menu, dropdown);
+            }
+        };
 
         toggle.onclick = () => {
             const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
