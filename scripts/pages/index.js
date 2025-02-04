@@ -24,7 +24,6 @@ class IndexPage {
                             text: 'Nos photographes',
                             attrs: {
                                 tabindex: '0',
-                                role: 'heading',
                                 'aria-level': '1'
                             }
                         }

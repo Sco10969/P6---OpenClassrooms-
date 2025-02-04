@@ -3,6 +3,20 @@
 ## Présentation du Projet
 FishEye est une plateforme web dédiée aux photographes indépendants, permettant de mettre en valeur leurs travaux. Ce projet est un prototype fonctionnel avec un focus particulier sur l'accessibilité.
 
+## Installation et Démarrage
+1. Clonez le repository
+git clone https://github.com/Sco10969/P6---OpenClassrooms-.git
+
+2. Ouvrez le projet dans VS Code
+
+3. Installez l'extension "Live Server"
+   - Cliquez sur l'icône des extensions dans VS Code
+   - Recherchez "Live Server"
+   - Installez l'extension de Ritwick Dey
+
+4. Lancez le projet
+   - Clic sur Go Live en bas à droite de VS Code
+
 ## Technologies Utilisées
 - HTML5
 - CSS3 (avec imports modulaires)
