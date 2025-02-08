@@ -41,9 +41,11 @@ export class ContactModal extends ModalTemplate {
                         { id: 'email', label: 'Email', type: 'email' },
                         { id: 'message', label: 'Votre message', type: 'textarea' }
                     ].map(field => ({
+                        // Création de la structure de chaque champ du formulaire
                         tag: 'div',
                         className: 'formData',
                         children: [
+
                             {
                                 tag: 'label',
                                 attrs: { for: field.id },
@@ -90,12 +92,12 @@ export class ContactModal extends ModalTemplate {
 
         fields.forEach(field => {
             field.parentElement.removeAttribute('data-error-visible');
-            
+            // Vérification si le champ est vide
             if (!field.value.trim()) {
                 field.parentElement.setAttribute('data-error-visible', 'true');
                 isValid = false;
             }
-            
+            // Vérification si l'email est valide
             if (field.type === 'email' && !this.isValidEmail(field.value)) {
                 field.parentElement.setAttribute('data-error-visible', 'true');
                 isValid = false;
@@ -106,9 +108,11 @@ export class ContactModal extends ModalTemplate {
     }
 
     isValidEmail(email) {
+        // Vérification si l'email est valide
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
 
+    // Gestion de la soumission du formulaire
     handleSubmit(form) {
         const formData = new FormData(form);
         console.log('Form data:', Object.fromEntries(formData.entries()));

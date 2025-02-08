@@ -3,12 +3,15 @@ import { DropdownMenu } from '../dropdown-menu/dropdown-menu.js';
 
 export class SortMenu {
     constructor(onSortChange) {
+        // Options de tri
         this.options = [
             { id: 'popularity', label: 'Popularité' },
             { id: 'date', label: 'Date' },
             { id: 'title', label: 'Titre' }
         ];
+        // Option sélectionnée par défaut
         this.currentOption = this.options[0];
+        // Fonction de tri
         this.onSortChange = onSortChange;
 
         // Définition des fonctions de tri pour chaque option

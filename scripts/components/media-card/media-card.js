@@ -4,12 +4,15 @@ import { LightboxModal } from '../modals/lightbox-modal/lightbox-modal.js';
 
 export class MediaCard {
     constructor(media, photographerName, lightbox) {
+        // media contient soit { image: "photo.jpg" }
+        // soit { video: "video.mp4" }
         this.media = media;
         this.photographerName = photographerName;
         this.lightbox = lightbox;
     }
 
     render() {
+        // Structure de la carte média
         const cardStructure = {
             tag: 'article',
             className: 'media-card',
@@ -49,16 +52,22 @@ export class MediaCard {
         
         // Event pour la lightbox
         const openMedia = () => {
+            // Récupération de toutes les cartes média
             this.lightbox.mediaList = this.getAllMedias();
+            // Ouverture de la lightbox avec la carte média et l'index
             this.lightbox.open(this.media, this.getCurrentIndex());
         };
+
         const cardWrapper = card.querySelector('.media-wrapper');
         cardWrapper.tabIndex = 0;
         cardWrapper.addEventListener('keydown', (event) => {
+            // Ouverture de la lightbox avec la carte média et l'index
             if (event.key === 'Enter' || event.key === ' ') {
                 openMedia();
             }
         });
+
+        // Ouverture de la lightbox avec la carte média et l'index
         cardWrapper.onclick = openMedia;
 
 
@@ -67,9 +76,11 @@ export class MediaCard {
     }
 
     getMediaStructure() {
+        // Structure de l'image ou du vidéo
         if (this.media.image) {
             return {
                 tag: 'img',
+
                 attrs: {
                     src: `assets/medias/${this.photographerName}/${this.media.image}`,
                     alt: this.media.title,
@@ -98,8 +109,10 @@ export class MediaCard {
     }
 
     getAllMedias() {
+        // Récupération de toutes les cartes média
         if (!this.mediaList) {
             const mediaCards = Array.from(document.querySelectorAll('.media-card'));
+            // Création de la liste des médias
             this.mediaList = mediaCards.map(card => ({
                 id: card.dataset.mediaId,
                 title: card.querySelector('.media-title').textContent,
@@ -112,7 +125,9 @@ export class MediaCard {
     }
 
     getCurrentIndex() {
+        // Récupération de l'index de la carte média actuelle
         const mediaCards = Array.from(document.querySelectorAll('.media-card'));
         return mediaCards.findIndex(card => card.dataset.mediaId === this.media.id.toString());
     }
+
 }

@@ -8,8 +8,10 @@ class IndexPage {
     }
 
     render() {
+        // Création du logo
         const logo = new Logo().render();
-        
+
+        // Structure de la page
         const pageStructure = {
             tag: 'div',
             className: 'container',
@@ -48,18 +50,25 @@ class IndexPage {
             ]
         };
 
+        // Création de l'élément de la page
         const element = buildElement(pageStructure);
+        // Ajout de l'élément à l'app
         this.app.appendChild(element);
+        // Récupération de la section des photographes
         this.photographersSection = document.querySelector(".photographer_section");
     }
 
     init() {
         this.render();
+        // Chargement des données des photographes
         fetch('./data/photographers.json')
             .then(response => response.json())
             .then(data => {
+                // Parcours des photographes
                 data.photographers.forEach(photographer => {
+                    // Rendu de la carte photographe
                     const template = photographerTemplate({ photographerData: photographer });
+                    // Ajout de la carte photographe à la section des photographes
                     this.photographersSection.appendChild(template.getUserCardDOM());
                 });
             })
