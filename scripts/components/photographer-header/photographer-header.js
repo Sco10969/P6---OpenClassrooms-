@@ -38,14 +38,15 @@ export class PhotographerHeader {
                                 },
                                 {
                                     tag: 'span',
-                                    className: 'price sr-only',
+                                    className: 'sr-only',
                                     text: `${this.photographer.price} euro par jour`,
                                     attrs: {
                                         'aria-label': `${this.photographer.price} euro par jour`,
-                                        tabindex: '1'
+                                        role: 'text'
                                     }
                                 }
                             ]
+
                         }
                     ]
                 },

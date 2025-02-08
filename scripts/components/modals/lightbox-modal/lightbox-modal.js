@@ -53,7 +53,11 @@ export class LightboxModal extends ModalTemplate {
                         // Titre
                         {
                             tag: 'h2',
-                            className: 'lightbox-title'
+                            className: 'lightbox-title',
+                            text: 'Aperçu du média',
+                            attrs: {
+                                'aria-live': 'polite'
+                            }
                         }
                     ]
                 }
